@@ -40,3 +40,4 @@ coverage/
 
 # optional: parcel cache (rare, but harmless)
 .cache/
+notes.txt

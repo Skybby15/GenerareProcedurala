@@ -1,0 +1,1 @@
+export type DistanceMetric = "euclidean" | "manhattan" | "chebyshev" | "minkowski";

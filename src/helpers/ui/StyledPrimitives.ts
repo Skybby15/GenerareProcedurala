@@ -36,6 +36,8 @@ export const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 2px; }
 `;
 
+
+
 // ─── Animations ───────────────────────────────────────────────────────────────
 
 export const fadeSlideIn = keyframes`
@@ -440,6 +442,36 @@ export const ScenePlaceholder = styled.div`
     text-transform: uppercase;
     z-index: 1;
   }
+`;
+///--hand made
+
+export const LoadingPanel = styled.div`
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--bg);
+  color: var(--accent);
+
+  font-size: 24px;
+  font-weight: bold;
+
+  z-index: 4;
+`;
+
+export const SceneContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+`;
+
+export const SceneMountRef = styled.div`
+  width: 100%;
+  height: 100%;
 `;
 
 // ─── Config panel ─────────────────────────────────────────────────────────────

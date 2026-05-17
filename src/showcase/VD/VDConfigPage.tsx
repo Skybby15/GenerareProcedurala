@@ -1,6 +1,6 @@
 import type { DistanceMetric } from "../../helpers/types/DistanceMetric";
 import type { VDConfigValues } from "../../helpers/configs/VDConfig";
-import * as Styled from "../../helpers/ui/ConfigPrimitives";
+import * as Styled from "../../helpers/ui/StyledPrimitives";
 import { SliderField } from "../../helpers/ui/SliderField";
 import { setAccentColor } from "../../helpers/ui/setAccentColor";
 import { useEffect } from "react";

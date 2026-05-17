@@ -31,7 +31,6 @@ export function useAnimationLoop({
         const renderer = rendererRef.current
         const mount = mountRef.current
 
-
         const forward = forwardRef.current
         const flatForward = flatForwardRef.current
         const right = rightRef.current
@@ -41,11 +40,15 @@ export function useAnimationLoop({
         const controls = controlsRef.current
         const keys = keysRef.current
 
-        // 📊 Stats (once)
         if (!statsRef.current) {
-            statsRef.current = new Stats()
-            statsRef.current.showPanel(0)
-            mount.appendChild(statsRef.current.dom)
+
+            const stats = new Stats()
+            stats.showPanel(0) // sets it to be the fps panel
+            mount.appendChild(stats.dom)
+            stats.dom.style.position = "absolute";
+            stats.dom.style.pointerEvents = "none";
+
+            statsRef.current = stats
         }
 
         const animate = () => {
@@ -100,6 +103,7 @@ export function useAnimationLoop({
             }
 
             statsRef.current?.dom?.remove()
+            statsRef.current = null
         }
 
     },[mountRef,cameraRef,controlsRef,keysRef,sceneRef,rendererRef])

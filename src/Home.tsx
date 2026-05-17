@@ -1,6 +1,6 @@
 
 
-import * as Styled from "./helpers/ui/ConfigPrimitives";
+import * as Styled from "./helpers/ui/StyledPrimitives";
 import CA2DScene from "./showcase/CA/CAScenePage";
 import { CAConfigPresets } from "./helpers/configs/CAConfig";
 

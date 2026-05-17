@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import type { PNConfigValues } from "../../helpers/configs/PNConfig";
-import * as Styled from "../../helpers/ui/ConfigPrimitives";
+import * as Styled from "../../helpers/ui/StyledPrimitives";
 import { OctavePreview } from "../../helpers/ui/OctavePreview";
 import { setAccentColor } from "../../helpers/ui/setAccentColor";
 import { SliderField } from "../../helpers/ui/SliderField";

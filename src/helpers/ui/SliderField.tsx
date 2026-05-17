@@ -1,4 +1,4 @@
-import * as Styled from "./ConfigPrimitives";
+import * as Styled from "./StyledPrimitives";
 
 export function SliderField({
   label,

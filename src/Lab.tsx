@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import * as Styled from "./helpers/ui/ConfigPrimitives";
+import * as Styled from "./helpers/ui/StyledPrimitives";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import type { DLAConfigValues } from "../../helpers/configs/DLAConfig";
 import { ComplexityPreview } from "../../helpers/ui/ComplexityPreview";
-import * as Styled from "../../helpers/ui/ConfigPrimitives";
+import * as Styled from "../../helpers/ui/StyledPrimitives";
 import { SliderField } from "../../helpers/ui/SliderField";
 import { setAccentColor } from "../../helpers/ui/setAccentColor";
 

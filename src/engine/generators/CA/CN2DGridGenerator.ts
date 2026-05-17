@@ -84,6 +84,10 @@ export class CA2DGridGenerator implements IGridGenerator<number[][], CAConfigVal
         y: number,
         config: CAConfigValues
     ): number {
+        const {
+            edgeBehavior
+        } = config;
+
         const dirs = [
             [-1, -1], [-1, 0], [-1, 1],
             [0, -1],          [0, 1],
@@ -97,7 +101,7 @@ export class CA2DGridGenerator implements IGridGenerator<number[][], CAConfigVal
             let nx = x + dx;
             let ny = y + dy;
 
-            if (config.edgeBehavior === "alive") {
+            if (edgeBehavior === "alive") {
                 nx = (nx + size) % size;
                 ny = (ny + size) % size;
                 count += grid[ny][nx];

@@ -16,7 +16,7 @@ export function useThreeScene(mountRef: React.RefObject<HTMLDivElement | null>) 
 
         if (!sceneRef.current) {
             sceneRef.current = new THREE.Scene()
-            sceneRef.current.background = new THREE.Color('#0f1b32')
+            sceneRef.current.background = new THREE.Color('#0d1117')
         }
 
         if (!cameraRef.current) {

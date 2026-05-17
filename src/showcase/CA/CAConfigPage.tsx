@@ -1,7 +1,7 @@
 
 import { useEffect } from "react";
 import type { CAConfigValues } from "../../helpers/configs/CAConfig";
-import * as Styled from "../../helpers/ui/ConfigPrimitives";
+import * as Styled from "../../helpers/ui/StyledPrimitives";
 import { SliderField } from "../../helpers/ui/SliderField";
 import { setAccentColor } from "../../helpers/ui/setAccentColor";
 

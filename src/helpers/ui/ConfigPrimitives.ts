@@ -75,6 +75,123 @@ export const Shell = styled.div`
   }
 `;
 
+export const HomeContainer = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 20px;
+  height: calc(100vh - 48px);
+  overflow-y: auto;
+  width: 100%;
+`;
+
+export const HeroPanel = styled.section`
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--panel-radius);
+  box-shadow: 0 0 40px rgba(0, 212, 255, 0.08);
+`;
+
+export const HeroSplit = styled.div`
+  display: grid;
+  grid-template-columns: minmax(320px, 2fr) minmax(260px, 1fr);
+  gap: 1px;
+  background: var(--border);
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const PlaceholderScene = styled.div`
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, rgba(0, 212, 255, 0.08), transparent 40%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 45%),
+    var(--surface-2);
+`;
+
+export const HeroContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  padding: 32px;
+  background: var(--surface);
+  text-align: left;
+`;
+
+export const HeroTitle = styled.h1`
+  font-family: var(--sans);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  color: var(--text-bright);
+  line-height: 1.05;
+`;
+
+export const HeroDescription = styled.p`
+  font-family: var(--mono);
+  color: var(--text-muted);
+  font-size: 0.96rem;
+  line-height: 1.75;
+  max-width: 80ch;
+`;
+
+export const ModelBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  width: fit-content;
+`;
+
+export const DetailsPanel = styled.section`
+  width: min(100%, 1120px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+export const FeatureCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--panel-radius);
+`;
+
+export const FeatureHeading = styled.h2`
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--text-bright);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+`;
+
+export const FeatureText = styled.p`
+  font-family: var(--mono);
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+`;
+
 // ─── Home button ──────────────────────────────────────────────────────────────
  
 export const HomeBtn = styled.button`

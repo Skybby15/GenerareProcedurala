@@ -1,3 +1,4 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css'
 import { CAConfigPresets } from './helpers/configs/CAConfig';
 import { DLAConfigPresets } from './helpers/configs/DLAConfig';
@@ -12,6 +13,7 @@ import PNConfigPage from './showcase/PN/PNConfigPage';
 import PNScenePage from './showcase/PN/PNScenePage';
 import VDConfigPage from './showcase/VD/VDConfigPage';
 import VDScenePage from './showcase/VD/VDScenePage';
+import Home from './Home';
 
 
 const pairs = [
@@ -44,7 +46,15 @@ const pairs = [
     defaultConfig: DLAConfigPresets.default,
   },
 ];
-
+//<Lab pairs={pairs} />
 export default function App() {
-  return <Lab pairs={pairs} />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/lab' element={<Lab pairs={pairs} />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }

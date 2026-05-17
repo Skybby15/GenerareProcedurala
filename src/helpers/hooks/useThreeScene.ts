@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react"
 import * as THREE from "three"
 
 export function useThreeScene(mountRef: React.RefObject<HTMLDivElement | null>) {
+    const resizeTimerRef = useRef<number | null>(0);
+
     const sceneRef = useRef<THREE.Scene | null>(null)
     const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
@@ -52,14 +54,19 @@ export function useThreeScene(mountRef: React.RefObject<HTMLDivElement | null>) 
         const camera = cameraRef.current
 
         const resizeObserver = new ResizeObserver(() => {
-            if (!mount || !renderer || !camera) return
+            if(resizeTimerRef.current)
+                clearTimeout(resizeTimerRef.current)
 
-            const w = mount.clientWidth
-            const h = mount.clientHeight
+            resizeTimerRef.current = window.setTimeout(()=>{
+                if (!mount || !renderer || !camera) return
 
-            renderer.setSize(w, h)
-            camera.aspect = w / h
-            camera.updateProjectionMatrix()
+                const w = mount.clientWidth
+                const h = mount.clientHeight
+
+                renderer.setSize(w, h)
+                camera.aspect = w / h
+                camera.updateProjectionMatrix()
+            }, 150)
         })
 
         resizeObserver.observe(mount)
@@ -69,6 +76,10 @@ export function useThreeScene(mountRef: React.RefObject<HTMLDivElement | null>) 
 
             if (renderer) {
                 renderer.dispose()
+            }
+
+            if (resizeTimerRef.current) {
+               clearTimeout(resizeTimerRef.current);
             }
         }
 

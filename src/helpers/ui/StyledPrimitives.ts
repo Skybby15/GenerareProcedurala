@@ -443,7 +443,6 @@ export const ScenePlaceholder = styled.div`
     z-index: 1;
   }
 `;
-///--hand made
 
 export const LoadingPanel = styled.div`
   position: absolute;

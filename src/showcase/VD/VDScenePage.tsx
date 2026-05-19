@@ -8,8 +8,8 @@ import { PlaneSceneMode } from "../../engine/scenemodes/PlaneSceneMode";
 import { Pipeline } from "../../engine/pipeline/Pipeline";
 import type { VDConfigValues } from "../../helpers/configs/VDConfig";
 import { VDTerritoriesMeshBuilder } from "../../engine/renderers/VD/VDTerritoriesMeshBuilder";
-import { VD2DGridGenerator } from "../../engine/generators/VD/VD2DGridGenerator";
 import { useMarkerPopup } from "../../helpers/hooks/useMarkerPopup";
+import type { GeneratorType } from "../../helpers/types/GeneratorTypes";
 
 interface VD2DSceneProps {
   config: VDConfigValues;
@@ -50,11 +50,11 @@ export default function VDScenePage({ config }: VD2DSceneProps) {
 
             const sceneMode = new PlaneSceneMode();
             const pipeline = new Pipeline(
-                new VD2DGridGenerator(),
                 new VDTerritoriesMeshBuilder(),
             )
+            const type : GeneratorType = "VD2D" 
 
-            manager.load(sceneMode, pipeline, config);
+            manager.loadAsync(sceneMode, pipeline, config, type);
             setLoading(false)
         }
 
@@ -115,9 +115,7 @@ export default function VDScenePage({ config }: VD2DSceneProps) {
         </Styled.SceneMountRef>
 
         {loading && (
-        <Styled.LoadingPanel>
-            Loading...
-        </Styled.LoadingPanel>
+        <Styled.LoadingSpinner/>
         )}
     </Styled.SceneContainer>
     );

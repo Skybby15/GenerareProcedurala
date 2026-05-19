@@ -1,4 +1,3 @@
-import Alea from "alea"
 import { createNoise2D } from "simplex-noise"
 import type { IGridGenerator } from "../IGridGenerator"
 import type { PNConfigValues } from "../../../helpers/configs/PNConfig"
@@ -9,10 +8,9 @@ export type PNGridData = {
 
 export class PN2DGridGenerator implements IGridGenerator<PNGridData, PNConfigValues> {
 
-    generate(config: PNConfigValues): PNGridData {
+    generate(config: PNConfigValues, rng: () => number): PNGridData {
 
         const {
-            seed,
             gridSize,
             scale,
             amplitude,
@@ -22,7 +20,7 @@ export class PN2DGridGenerator implements IGridGenerator<PNGridData, PNConfigVal
         } = config
 
         const noise2D = createNoise2D(
-            Alea(seed)
+            rng
         )
 
         const heights: number[][] = []
@@ -33,23 +31,29 @@ export class PN2DGridGenerator implements IGridGenerator<PNGridData, PNConfigVal
 
             for (let x = 0; x < gridSize; x++) {
 
-                let value = 0
+                let value = 0;
 
-                let frequency = scale
-                let strength = amplitude
+                let frequency = 1;
+                let strength = amplitude;
+
+                let maxValue = 0;
 
                 for (let o = 0; o < octaves; o++) {
 
                     value += noise2D(
-                        x * frequency,
-                        z * frequency
-                    ) * strength
+                        (x / scale) * frequency,
+                        (z / scale) * frequency
+                    ) * strength;
 
-                    frequency *= lacunarity
-                    strength *= persistance
+                    maxValue += strength;
+
+                    frequency *= lacunarity;
+                    strength *= persistance;
                 }
 
-                heights[z][x] = value
+                value /= maxValue;
+
+                heights[z][x] = value;
             }
         }
 

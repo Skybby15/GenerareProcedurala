@@ -1,6 +1,10 @@
-export type CAConfigValues = {
-    seed: string
-    gridSize: number
+import type { BasicConfigValues } from "../types/BasicConfig"
+
+export type CAViewMode = "Smooth2D" | "Blocky2D" | "Cave3D"
+
+
+export type CAConfigValues = BasicConfigValues & {
+    mode: CAViewMode
 
     initialGridDensity: number
     steps: number
@@ -22,16 +26,18 @@ export class CAConfigPresets {
         seed: '0',
         gridSize: 100,
 
-        initialGridDensity: 50,
-        steps: 100,
+        mode:"Smooth2D",
 
-        minimumBirthNeighbors: 3,
-        maximumBirthNeighbors: 3,
+        initialGridDensity: 50,
+        steps: 10,
+
+        minimumBirthNeighbors: 0,
+        maximumBirthNeighbors: 4,
 
         minimumSurvivalNeighbors: 2,
         maximumSurvivalNeighbors: 3,
 
-        edgeBehavior: "alive",
+        edgeBehavior: "dead",
 
         allowIsolatedStructures: true,
         minimumStructureSize: -1,

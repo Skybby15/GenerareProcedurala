@@ -2,8 +2,10 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/Addons.js'
 import { Pipeline } from '../pipeline/Pipeline'
 import type { ISceneMode } from '../scenemodes/ISceneMode'
+import type { BasicConfigValues } from '../../helpers/types/BasicConfig'
+import type { GeneratorType } from '../../helpers/types/GeneratorTypes'
 
-export class SceneManager<TConfig> {
+export class SceneManager<TGridData> {
     private scene: THREE.Scene
     private camera: THREE.Camera
     private controls: OrbitControls
@@ -18,13 +20,18 @@ export class SceneManager<TConfig> {
         this.controls = controls
     }
 
-    load(
-        mode: ISceneMode<TConfig>,
-        pipeline: Pipeline<TConfig, any>,
-        config: TConfig
+    async loadAsync(
+        mode: ISceneMode<BasicConfigValues>,
+        pipeline: Pipeline<TGridData>,
+        config: BasicConfigValues,
+        type: GeneratorType,
     ) {
 
         this.dispose()
+
+        const grid = await this.generateGridAsync(type,config)
+
+        const worldObject = pipeline.run(grid,config)
 
         mode.setup(
             config,
@@ -32,8 +39,6 @@ export class SceneManager<TConfig> {
             this.camera,
             this.controls
         )
-
-        const worldObject = pipeline.run(config)
 
         this.scene.add(worldObject)
     }
@@ -58,5 +63,25 @@ export class SceneManager<TConfig> {
         })
 
         this.scene.clear()
+    }
+
+    
+    generateGridAsync(
+        type: GeneratorType,
+        config: BasicConfigValues
+    ): Promise<TGridData> {
+        return new Promise((resolve) => {
+            const worker = new Worker(
+                new URL("../../helpers/workers/generatorWorker.ts", import.meta.url),
+                { type: "module" }
+            );
+
+            worker.onmessage = (ev) => {
+                resolve(ev.data.grid);
+                worker.terminate();
+            };
+
+            worker.postMessage({ type, config });
+        });
     }
 }

@@ -2,8 +2,7 @@ import * as THREE from "three";
 import type { CAConfigValues } from "../../../helpers/configs/CAConfig";
 import type { IMeshBuilder } from "../IMeshBuilder";
 
-export class CA2DMeshBuilder implements IMeshBuilder<number[][], CAConfigValues> {
-
+export class CA2DBlockMeshBuilder implements IMeshBuilder<number[][], CAConfigValues> {
     build(gridData: number[][], config: CAConfigValues): THREE.Object3D {
         const {gridSize} = config
 

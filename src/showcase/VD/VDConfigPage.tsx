@@ -48,7 +48,7 @@ export default function VDConfigPage({ values, onChange }: VDConfigProps) {
             <SliderField
                 label="Grid Size"
                 value={values.gridSize}
-                min={32} max={512} step={32}
+                min={50} max={400} step={5}
                 onChange={v => set("gridSize", v)}
             />
             </Styled.Section>

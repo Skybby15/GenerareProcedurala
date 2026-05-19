@@ -1,18 +1,15 @@
-import seedrandom from "seedrandom";
 import type { CAConfigValues } from "../../../helpers/configs/CAConfig";
 import type { IGridGenerator } from "../IGridGenerator";
 
 export class CA2DGridGenerator implements IGridGenerator<number[][], CAConfigValues> {
 
-    generate(config: CAConfigValues): number[][] {
+    generate(config: CAConfigValues, rng: () => number): number[][] {
         const {
-            seed,
             steps,
             allowIsolatedStructures,
             minimumStructureSize
         } = config
 
-        const rng = seedrandom(seed);
         let grid = this.createInitialGrid(config, rng);
 
         for (let i = 0; i < steps; i++) {

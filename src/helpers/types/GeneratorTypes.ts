@@ -1,0 +1,1 @@
+export type GeneratorType = "CA2D" | "VD2D" | "PN2D" | "DLA2D" | "CA3D" | "DLA3D"

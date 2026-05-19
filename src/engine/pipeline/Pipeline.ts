@@ -1,22 +1,18 @@
 import * as THREE from 'three'
 
 import { type IMeshBuilder } from '../renderers/IMeshBuilder'
-import { type IGridGenerator } from '../generators/IGridGenerator'
+import type { BasicConfigValues } from '../../helpers/types/BasicConfig'
 
-export class Pipeline<TGridData, TConfig> {
-    private generator: IGridGenerator<TGridData, TConfig>
-    private meshBuilder: IMeshBuilder<TGridData, TConfig>
+export class Pipeline<TGridData> {
+    private meshBuilder: IMeshBuilder<TGridData, BasicConfigValues>
 
     constructor(
-        generator: IGridGenerator<TGridData, TConfig>,
-        meshBuilder: IMeshBuilder<TGridData, TConfig>
+        meshBuilder: IMeshBuilder<TGridData, BasicConfigValues>
     ) {
-        this.generator = generator;
         this.meshBuilder = meshBuilder;
     }
 
-    run(config: TConfig): THREE.Object3D {
-        const grid = this.generator.generate(config)
+    run(grid: TGridData, config: BasicConfigValues): THREE.Object3D {
         return this.meshBuilder.build(grid, config)
     }
 }

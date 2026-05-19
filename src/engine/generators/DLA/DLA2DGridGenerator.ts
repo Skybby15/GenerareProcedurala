@@ -1,13 +1,10 @@
 import type { DLAConfigValues } from "../../../helpers/configs/DLAConfig";
 import type { IGridGenerator } from "../IGridGenerator";
-import seedrandom from 'seedrandom';
 
 
 export class DLA2DGridGenerator implements IGridGenerator<boolean[][], DLAConfigValues> {
-    generate(config: DLAConfigValues): boolean[][] {
-
+    generate(config: DLAConfigValues, rng: () => number): boolean[][] {
         const {
-            seed,
             gridSize,
 
             particles,
@@ -36,20 +33,19 @@ export class DLA2DGridGenerator implements IGridGenerator<boolean[][], DLAConfig
             steps,
             gridSize,
             grid,
-            seed
+            rng
         )
 
         return grid
     }
 
-    private runDLA(particles: number, steps: number ,gridSize: number, grid: boolean[][], seed: string) { 
-        const seededRandom = seedrandom(seed)
+    private runDLA(particles: number, steps: number ,gridSize: number, grid: boolean[][], rng: () => number) { 
         for (let p = 0; p < particles; p++) { 
-            let { x, y } = this.spawnOnEdge(gridSize,seed) 
+            let { x, y } = this.spawnOnEdge(gridSize,rng) 
             x = Math.floor(x) 
             y = Math.floor(y) 
             for (let s = 0; s < steps; s++) { // random walk 
-                const dir = Math.floor(seededRandom() * 4) 
+                const dir = Math.floor(rng() * 4) 
                 if (dir === 0) x++ 
                 if (dir === 1) x-- 
                 if (dir === 2) y++ 
@@ -71,13 +67,12 @@ export class DLA2DGridGenerator implements IGridGenerator<boolean[][], DLAConfig
         }
     }
 
-    private spawnOnEdge(gridSize: number, seed: string) { 
-        const seededRandom = seedrandom(seed)
+    private spawnOnEdge(gridSize: number, rng: () => number) { 
 
-        const side = Math.floor(seededRandom() * 4) 
-        if (side === 0) return { x: 0, y: seededRandom() * gridSize } 
-        if (side === 1) return { x: gridSize - 1, y: seededRandom() * gridSize } 
-        if (side === 2) return { x: seededRandom() * gridSize, y: 0 } 
-        return { x: seededRandom() * gridSize, y: gridSize - 1 } 
+        const side = Math.floor(rng() * 4) 
+        if (side === 0) return { x: 0, y: rng() * gridSize } 
+        if (side === 1) return { x: gridSize - 1, y: rng() * gridSize } 
+        if (side === 2) return { x: rng() * gridSize, y: 0 } 
+        return { x: rng() * gridSize, y: gridSize - 1 } 
     }
 }

@@ -1,7 +1,6 @@
 import type { IGridGenerator } from "../IGridGenerator"
 import type { VDConfigValues } from "../../../helpers/configs/VDConfig"
 import { getDistanceFunction } from "../../../helpers/others/distances"
-import seedrandom from "seedrandom"
 
 export type Site = {
     x: number,
@@ -17,10 +16,9 @@ export type VDGridData = {
 export class VD2DGridGenerator implements IGridGenerator<VDGridData, VDConfigValues> {
     private distanceFn: (x1: number, y1: number, x2: number, y2: number) => number = getDistanceFunction("euclidean")
 
-    generate(config: VDConfigValues): VDGridData {
+    generate(config: VDConfigValues, rng: () => number): VDGridData {
 
         const {
-            seed,
             gridSize,
             sitesNumber,
             distanceFunction,
@@ -32,7 +30,7 @@ export class VD2DGridGenerator implements IGridGenerator<VDGridData, VDConfigVal
 
         this.distanceFn = getDistanceFunction(distanceFunction, minkowskiP)
 
-        const sites = this.generateSites(seed, gridSize, sitesNumber, weightedSites, maxWeight)
+        const sites = this.generateSites(gridSize, sitesNumber, weightedSites, maxWeight, rng)
 
         let relaxedSites = sites;
 
@@ -81,21 +79,20 @@ export class VD2DGridGenerator implements IGridGenerator<VDGridData, VDConfigVal
     }
 
     private generateSites(
-        seed: string,
         gridSize: number,
         sitesNumber: number,
         weightedSites: boolean,
-        maxWeight: number
+        maxWeight: number,
+        rng: () => number
     ): Site[] {
 
-        const rand = seedrandom(seed)
         const sites: Site[] = []
 
         for (let i = 0; i < sitesNumber; i++) {
             sites.push({
-                x: Math.floor(rand() * gridSize),
-                y: Math.floor(rand() * gridSize),
-                weight: weightedSites ? rand() * maxWeight : 1
+                x: Math.floor(rng() * gridSize),
+                y: Math.floor(rng() * gridSize),
+                weight: weightedSites ? rng() * maxWeight : 1
             })
         }
 

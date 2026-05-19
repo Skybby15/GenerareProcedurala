@@ -1,14 +1,19 @@
 import * as Styled from "../../helpers/ui/StyledPrimitives"
 import { useEffect, useRef, useState } from "react";
 import type { CAConfigValues } from "../../helpers/configs/CAConfig";
-import { CA2DGridGenerator } from "../../engine/generators/CA/CN2DGridGenerator";
-import { CA2DMeshBuilder } from "../../engine/renderers/CA/CAPlaneMeshBuilder";
 import { useThreeScene } from "../../helpers/hooks/useThreeScene";
 import { SceneManager } from "../../engine/manager/SceneManager";
 import { useCameraControls } from "../../helpers/hooks/useCameraControls";
 import { useAnimationLoop } from "../../helpers/hooks/useAnimationLoop";
 import { PlaneSceneMode } from "../../engine/scenemodes/PlaneSceneMode";
 import { Pipeline } from "../../engine/pipeline/Pipeline";
+import type { GeneratorType } from "../../helpers/types/GeneratorTypes";
+import { CA2DSmoothMeshBuilder } from "../../engine/renderers/CA/CA2DSmoothMeshBuilder";
+import type { IMeshBuilder } from "../../engine/renderers/IMeshBuilder";
+import { CA2DBlockMeshBuilder } from "../../engine/renderers/CA/CA2DBlockMeshBuilder";
+import { CA3DGreedyMeshBuilder } from "../../engine/renderers/CA/CA3DCaveMeshBuilder";
+import type { ISceneMode } from "../../engine/scenemodes/ISceneMode";
+import { CaveSceneMode } from "../../engine/scenemodes/CaveSceneMode";
 
 interface CA2DSceneProps {
     config: CAConfigValues;
@@ -33,6 +38,7 @@ export default function CA2DScene({ config }: CA2DSceneProps) {
   useEffect(() => {
     const loadScene = async () => {
       setLoading(true);
+      const mode = config.mode;
       const mount = mountRef.current;
       if (!mount) return;
 
@@ -47,13 +53,33 @@ export default function CA2DScene({ config }: CA2DSceneProps) {
 
       const manager = new SceneManager(scene,camera,controls);
 
-      const sceneMode = new PlaneSceneMode();
-      const pipeline = new Pipeline(
-          new CA2DGridGenerator(),
-          new CA2DMeshBuilder()
-    )
+      
+      let meshBuilder : IMeshBuilder<any,any>
+      let sceneMode : ISceneMode<CAConfigValues>
+      let type : GeneratorType
 
-      manager.load(sceneMode, pipeline, config);
+      switch(mode){
+        case "Smooth2D":
+          meshBuilder = new CA2DSmoothMeshBuilder()
+          sceneMode = new PlaneSceneMode()
+          type = "CA2D"
+          break
+        case "Blocky2D":
+          meshBuilder = new CA2DBlockMeshBuilder()
+          sceneMode = new PlaneSceneMode()
+          type = "CA2D"
+          break
+        case "Cave3D":
+          meshBuilder = new CA3DGreedyMeshBuilder()
+          sceneMode = new CaveSceneMode()
+          type = "CA3D"
+      }
+
+      const pipeline = new Pipeline(
+          meshBuilder
+      )
+
+      manager.loadAsync(sceneMode, pipeline, config, type);
       setLoading(false);
     }
 
@@ -90,9 +116,7 @@ export default function CA2DScene({ config }: CA2DSceneProps) {
       />
 
       {loading && (
-        <Styled.LoadingPanel>
-          Loading...
-        </Styled.LoadingPanel>
+        <Styled.LoadingSpinner/>
       )}
     </Styled.SceneContainer>
   );

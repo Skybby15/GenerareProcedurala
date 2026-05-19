@@ -58,7 +58,7 @@ export default function DLAConfigPage({ values, onChange }: DLAConfigProps) {
             <SliderField
                 label="Steps"
                 value={values.steps}
-                min={10} max={500} step={10}
+                min={10} max={10_000} step={10}
                 onChange={v => set("steps", v)}
             />
 

@@ -3,110 +3,57 @@ import type { IMeshBuilder } from "../IMeshBuilder";
 import type { DLAConfigValues } from "../../../helpers/configs/DLAConfig";
 
 export class DLAPlaneMeshBuilder
-implements IMeshBuilder<boolean[][], DLAConfigValues>
+  implements IMeshBuilder<boolean[][], DLAConfigValues>
 {
-    build(
-        grid: boolean[][],
-        config: DLAConfigValues
-    ): THREE.Object3D {
+  build(grid: boolean[][], config: DLAConfigValues): THREE.Object3D {
 
-        const group = new THREE.Group();
+    const group = new THREE.Group();
+    const { gridSize } = config;
 
-        const {
-            gridSize,
-        } = config;
+    const geometry = new THREE.PlaneGeometry(
+      gridSize,
+      gridSize,
+      gridSize - 1,
+      gridSize - 1
+    );
 
-        // -------------------------------------------------
-        // Instanced cubes
-        // -------------------------------------------------
+    geometry.rotateX(-Math.PI / 2);
 
-        const cellSize = 1;
+    const position = geometry.attributes.position as THREE.BufferAttribute;
 
-        const cubeGeo =
-            new THREE.BoxGeometry(
-                cellSize,
-                cellSize,
-                cellSize
-            );
+    const riverDepth = 0.4; // how deep the river cuts
 
-        const cubeMat =
-            new THREE.MeshStandardMaterial({
-                color: "#66ccff",
-                emissive: "#113344",
-            });
+    // Plane vertices are in row-major order
+    let i = 0;
 
-        let count = 0;
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
 
-        for (let y = 0; y < gridSize; y++) {
-            for (let x = 0; x < gridSize; x++) {
+        const isRiver = grid[y][x];
 
-                if (grid[y][x]) {
-                    count++;
-                }
-            }
+        const idx = i * 3 + 1; // y component of vertex position
+
+        if (isRiver) {
+          position.array[idx] -= riverDepth;
         }
 
-        const mesh =
-            new THREE.InstancedMesh(
-                cubeGeo,
-                cubeMat,
-                count
-            );
-
-        const matrix = new THREE.Matrix4();
-
-        let index = 0;
-
-        const half = gridSize / 2;
-
-        for (let y = 0; y < gridSize; y++) {
-            for (let x = 0; x < gridSize; x++) {
-
-                if (!grid[y][x])
-                    continue;
-
-                matrix.makeTranslation(
-                    x - half,
-                    0,
-                    y - half
-                );
-
-                mesh.setMatrixAt(index, matrix);
-
-                index++;
-            }
-        }
-
-        mesh.instanceMatrix.needsUpdate = true;
-
-        group.add(mesh);
-
-        // -------------------------------------------------
-        // Ground plane
-        // -------------------------------------------------
-
-        const planeGeo =
-            new THREE.PlaneGeometry(
-                gridSize,
-                gridSize
-            );
-
-        planeGeo.rotateX(-Math.PI / 2);
-
-        const planeMat =
-            new THREE.MeshStandardMaterial({
-                color: "#111111",
-                wireframe: true,
-            });
-
-        const plane =
-            new THREE.Mesh(
-                planeGeo,
-                planeMat
-            );
-
-        group.add(plane);
-
-        return group;
+        i++;
+      }
     }
+
+    position.needsUpdate = true;
+    geometry.computeVertexNormals();
+
+    const material = new THREE.MeshStandardMaterial({
+      color: '#4d8f4f',
+      roughness: 1,
+      side: THREE.DoubleSide,
+    });
+
+    const plane = new THREE.Mesh(geometry, material);
+
+    group.add(plane);
+
+    return group;
+  }
 }

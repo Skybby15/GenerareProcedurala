@@ -444,21 +444,30 @@ export const ScenePlaceholder = styled.div`
   }
 `;
 
-export const LoadingPanel = styled.div`
-  position: absolute;
-  inset: 0;
+const spin = keyframes`
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+`;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const LoadingSpinner = styled.div`
+    position: absolute;
+    top: 20px;
+    right: 20px;
 
-  background: var(--bg);
-  color: var(--accent);
+    width: 32px;
+    height: 32px;
 
-  font-size: 24px;
-  font-weight: bold;
+    border: 4px solid rgba(255,255,255,0.2);
+    border-top: 4px solid white;
+    border-radius: 50%;
 
-  z-index: 4;
+    animation: ${spin} 1s linear infinite;
+
+    z-index: 9999;
 `;
 
 export const SceneContainer = styled.div`
@@ -471,6 +480,7 @@ export const SceneContainer = styled.div`
 export const SceneMountRef = styled.div`
   width: 100%;
   height: 100%;
+  z-index: 1;
 `;
 
 // ─── Config panel ─────────────────────────────────────────────────────────────

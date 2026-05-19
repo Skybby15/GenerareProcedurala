@@ -7,8 +7,8 @@ import { useAnimationLoop } from "../../helpers/hooks/useAnimationLoop";
 import { PlaneSceneMode } from "../../engine/scenemodes/PlaneSceneMode";
 import { Pipeline } from "../../engine/pipeline/Pipeline";
 import type { PNConfigValues } from "../../helpers/configs/PNConfig";
-import { PN2DGridGenerator } from "../../engine/generators/PN/PN2DGridGenerator";
 import { PNPlaneMeshBuilder } from "../../engine/renderers/PN/PNPlaneMeshBuilder";
+import type { GeneratorType } from "../../helpers/types/GeneratorTypes";
 
 interface PNSceneProps {
     config: PNConfigValues;
@@ -49,12 +49,14 @@ export default function PNScenePage({ config }: PNSceneProps) {
 
             const sceneMode = new PlaneSceneMode();
             const pipeline = new Pipeline(
-                new PN2DGridGenerator(),
                 new PNPlaneMeshBuilder()
             )
-            
-            manager.load(sceneMode, pipeline, config);
-            setLoading(true)
+            const type : GeneratorType = "PN2D"
+
+            manager.loadAsync(sceneMode, pipeline, config, type)
+            .then(() => 
+                setLoading(false)
+            )
         }
 
         if (debounceRef.current) {
@@ -90,9 +92,7 @@ export default function PNScenePage({ config }: PNSceneProps) {
         />
 
         {loading && (
-        <Styled.LoadingPanel>
-            Loading...
-        </Styled.LoadingPanel>
+        <Styled.LoadingSpinner/>
         )}
     </Styled.SceneContainer>
     );

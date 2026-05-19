@@ -1,9 +1,15 @@
 
 import { useEffect } from "react";
-import type { CAConfigValues } from "../../helpers/configs/CAConfig";
+import type { CAConfigValues, CAViewMode } from "../../helpers/configs/CAConfig";
 import * as Styled from "../../helpers/ui/StyledPrimitives";
 import { SliderField } from "../../helpers/ui/SliderField";
 import { setAccentColor } from "../../helpers/ui/setAccentColor";
+
+const ViewModes : CAViewMode[] = [
+  "Blocky2D",
+  "Smooth2D",
+  "Cave3D",
+]
 
 interface CA2DConfigProps {
   values: CAConfigValues;
@@ -20,6 +26,21 @@ export default function CA2DConfig({ values, onChange }: CA2DConfigProps) {
 
   return (
     <Styled.Wrap>
+      {/* ── Mode ── */}
+      <Styled.Section>
+        <Styled.SectionTitle>Mode</Styled.SectionTitle>
+        <Styled.SegmentRow>
+          { ViewModes.map(opt => (
+            <Styled.Seg
+              key={opt}
+              $active={values.mode === opt}
+              onClick={() => set("mode", opt)}
+            >
+              {opt}
+            </Styled.Seg>
+          ))}
+        </Styled.SegmentRow>
+      </Styled.Section>
 
       {/* ── Seed ── */}
       <Styled.Section>

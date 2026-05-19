@@ -7,8 +7,8 @@ import { useAnimationLoop } from "../../helpers/hooks/useAnimationLoop";
 import { PlaneSceneMode } from "../../engine/scenemodes/PlaneSceneMode";
 import { Pipeline } from "../../engine/pipeline/Pipeline";
 import type { DLAConfigValues } from "../../helpers/configs/DLAConfig";
-import { DLA2DGridGenerator } from "../../engine/generators/DLA/DLA2DGridGenerator";
 import { DLAPlaneMeshBuilder } from "../../engine/renderers/DLA/DLAPlaneMeshBuilder";
+import type { GeneratorType } from "../../helpers/types/GeneratorTypes";
 
 interface DLASceneProps {
     config: DLAConfigValues;
@@ -33,6 +33,7 @@ export default function DLAScenePage({ config }: DLASceneProps) {
     useEffect(() => {
         const loadScene = async () => {
             setLoading(true)
+            await new Promise(requestAnimationFrame);
             const mount = mountRef.current;
             if (!mount) return;
 
@@ -49,11 +50,11 @@ export default function DLAScenePage({ config }: DLASceneProps) {
 
             const sceneMode = new PlaneSceneMode();
             const pipeline = new Pipeline(
-                new DLA2DGridGenerator(),
                 new DLAPlaneMeshBuilder()
             )
+            const type : GeneratorType = "DLA2D"
 
-            manager.load(sceneMode, pipeline, config);
+            manager.loadAsync(sceneMode, pipeline, config, type);
             setLoading(false)
         }
 
@@ -88,9 +89,7 @@ export default function DLAScenePage({ config }: DLASceneProps) {
           />
     
           {loading && (
-            <Styled.LoadingPanel>
-              Loading...
-            </Styled.LoadingPanel>
+            <Styled.LoadingSpinner/>
           )}
         </Styled.SceneContainer>
     );

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { DLAConfigValues } from "../../helpers/configs/DLAConfig";
+import type { DLAConfigValues, DLAViewMode } from "../../helpers/configs/DLAConfig";
 import { ComplexityPreview } from "../../helpers/ui/ComplexityPreview";
 import * as Styled from "../../helpers/ui/StyledPrimitives";
 import { SliderField } from "../../helpers/ui/SliderField";
@@ -9,6 +9,11 @@ interface DLAConfigProps {
   values: DLAConfigValues;
   onChange: (values: DLAConfigValues) => void;
 }
+
+const ViewModes : DLAViewMode[] = [
+    "2DSmooth",
+    "3DCave"
+] 
 
 export default function DLAConfigPage({ values, onChange }: DLAConfigProps) {
     const set = <K extends keyof DLAConfigValues>(key: K, val: DLAConfigValues[K]) =>
@@ -20,6 +25,22 @@ export default function DLAConfigPage({ values, onChange }: DLAConfigProps) {
 
     return (
         <Styled.Wrap>
+
+            {/* ── Mode ── */}
+                  <Styled.Section>
+                    <Styled.SectionTitle>Mode</Styled.SectionTitle>
+                    <Styled.SegmentRow>
+                      { ViewModes.map(opt => (
+                        <Styled.Seg
+                          key={opt}
+                          $active={values.mode === opt}
+                          onClick={() => set("mode", opt)}
+                        >
+                          {opt}
+                        </Styled.Seg>
+                      ))}
+                    </Styled.SegmentRow>
+                  </Styled.Section>
 
             {/* ── Seed ── */}
             <Styled.Section>

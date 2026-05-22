@@ -10,6 +10,7 @@ import type { PNConfigValues } from "../configs/PNConfig";
 import type { VDConfigValues } from "../configs/VDConfig";
 import type { IGridGenerator } from "../../engine/generators/IGridGenerator";
 import { CA3DGridGenerator } from "../../engine/generators/CA/CN3DGridGenerator";
+import { DLA3DGridGenerator } from "../../engine/generators/DLA/DLA3DGridGenerator";
 
 self.onmessage = (e : MessageEvent<GeneratorWorkerData>) => {
   const { type, config } = e.data;
@@ -39,7 +40,7 @@ self.onmessage = (e : MessageEvent<GeneratorWorkerData>) => {
         trueConfig = config as CAConfigValues;
         break
     case "DLA3D":
-        generator = null
+        generator = new DLA3DGridGenerator();
         trueConfig = config as DLAConfigValues;
   }
 

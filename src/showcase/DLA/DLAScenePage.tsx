@@ -9,6 +9,9 @@ import { Pipeline } from "../../engine/pipeline/Pipeline";
 import type { DLAConfigValues } from "../../helpers/configs/DLAConfig";
 import { DLAPlaneMeshBuilder } from "../../engine/renderers/DLA/DLAPlaneMeshBuilder";
 import type { GeneratorType } from "../../helpers/types/GeneratorTypes";
+import { CaveSceneMode } from "../../engine/scenemodes/CaveSceneMode";
+import { DLACaveMeshBuilder } from "../../engine/renderers/DLA/DLACaveMeshBuilder";
+import type { ISceneMode } from "../../engine/scenemodes/ISceneMode";
 
 interface DLASceneProps {
     config: DLAConfigValues;
@@ -35,6 +38,7 @@ export default function DLAScenePage({ config }: DLASceneProps) {
             setLoading(true)
             await new Promise(requestAnimationFrame);
             const mount = mountRef.current;
+            const mode = config.mode;
             if (!mount) return;
 
             // ── Scene setup ─────────────────────────────────────────────────────────
@@ -48,11 +52,26 @@ export default function DLAScenePage({ config }: DLASceneProps) {
 
             const manager = new SceneManager(scene,camera,controls);
 
-            const sceneMode = new PlaneSceneMode();
-            const pipeline = new Pipeline(
-                new DLAPlaneMeshBuilder()
-            )
-            const type : GeneratorType = "DLA2D"
+            let sceneMode : ISceneMode<any>;
+            let pipeline : Pipeline<any>
+            let type : GeneratorType = "DLA2D"
+
+            switch(mode){
+                case "2DSmooth":
+                    sceneMode = new PlaneSceneMode();
+                    pipeline = new Pipeline(
+                        new DLAPlaneMeshBuilder()
+                    )
+                    type = "DLA2D"
+                    break
+                case "3DCave":
+                    sceneMode = new CaveSceneMode();
+                    pipeline = new Pipeline(
+                        new DLACaveMeshBuilder()
+                    )
+                    type = "DLA3D"
+                    break
+            }
 
             manager.loadAsync(sceneMode, pipeline, config, type);
             setLoading(false)

@@ -55,7 +55,7 @@ export class SceneManager<TGridData> {
                 }
             }
         })
-
+        this.camera.clear()
         this.scene.clear()
     }
 

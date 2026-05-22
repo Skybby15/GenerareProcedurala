@@ -42,4 +42,25 @@ export class CAConfigPresets {
         allowIsolatedStructures: true,
         minimumStructureSize: -1,
     }
+
+    static chaotic: CAConfigValues = {
+        seed: '42030',
+        gridSize: 80,
+
+        mode: "Smooth2D",
+
+        initialGridDensity: 46,
+        steps:10,
+
+        minimumBirthNeighbors:2,
+        maximumBirthNeighbors:5,
+
+        minimumSurvivalNeighbors:2,
+        maximumSurvivalNeighbors:4,
+
+        edgeBehavior: "alive",
+
+        allowIsolatedStructures: true,
+        minimumStructureSize: -1
+    }
 }

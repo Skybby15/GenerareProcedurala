@@ -60,7 +60,7 @@ export default function PNConfigPage({ values, onChange }: PNConfigProps) {
                 <SliderField
                 label="Amplitude"
                 value={values.amplitude}
-                min={0.1} max={5} step={0.1}
+                min={0} max={40} step={0.5}
                 onChange={v => set("amplitude", v)}
                 />
             </Styled.Section>

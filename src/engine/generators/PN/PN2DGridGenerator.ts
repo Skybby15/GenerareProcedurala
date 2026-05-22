@@ -32,14 +32,11 @@ export class PN2DGridGenerator implements IGridGenerator<PNGridData, PNConfigVal
             for (let x = 0; x < gridSize; x++) {
 
                 let value = 0;
-
                 let frequency = 1;
-                let strength = amplitude;
-
+                let strength = 1;
                 let maxValue = 0;
 
                 for (let o = 0; o < octaves; o++) {
-
                     value += noise2D(
                         (x / scale) * frequency,
                         (z / scale) * frequency
@@ -53,7 +50,7 @@ export class PN2DGridGenerator implements IGridGenerator<PNGridData, PNConfigVal
 
                 value /= maxValue;
 
-                heights[z][x] = value;
+                heights[z][x] = value * amplitude;
             }
         }
 

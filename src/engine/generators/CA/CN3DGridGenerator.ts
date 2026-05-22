@@ -28,6 +28,8 @@ implements IGridGenerator<number[][][], CAConfigValues>
             );
         }
 
+        this.carveEmptySphere(grid,config.gridSize,8)
+
         return grid;
     }
 
@@ -291,6 +293,29 @@ implements IGridGenerator<number[][][], CAConfigValues>
                                 grid[cz][cy][cx] = 0;
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    private carveEmptySphere(
+        grid: number[][][],
+        gridSize: number,
+        radius: number
+    ) {
+        const center = Math.floor(gridSize / 2);
+        const r2 = radius * radius;
+
+        for (let z = 0; z < gridSize; z++) {
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    const dx = x - center;
+                    const dy = y - center;
+                    const dz = z - center;
+
+                    if (dx * dx + dy * dy + dz * dz <= r2) {
+                        grid[z][y][x] = 0;
                     }
                 }
             }

@@ -11,7 +11,7 @@ import type { GeneratorType } from "../../helpers/types/GeneratorTypes";
 import { CA2DSmoothMeshBuilder } from "../../engine/renderers/CA/CA2DSmoothMeshBuilder";
 import type { IMeshBuilder } from "../../engine/renderers/IMeshBuilder";
 import { CA2DBlockMeshBuilder } from "../../engine/renderers/CA/CA2DBlockMeshBuilder";
-import { CA3DGreedyMeshBuilder } from "../../engine/renderers/CA/CA3DCaveMeshBuilder";
+import { CA3DCaveMeshBuilder } from "../../engine/renderers/CA/CA3DCaveMeshBuilder";
 import type { ISceneMode } from "../../engine/scenemodes/ISceneMode";
 import { CaveSceneMode } from "../../engine/scenemodes/CaveSceneMode";
 
@@ -70,7 +70,7 @@ export default function CA2DScene({ config }: CA2DSceneProps) {
           type = "CA2D"
           break
         case "Cave3D":
-          meshBuilder = new CA3DGreedyMeshBuilder()
+          meshBuilder = new CA3DCaveMeshBuilder()
           sceneMode = new CaveSceneMode()
           type = "CA3D"
       }

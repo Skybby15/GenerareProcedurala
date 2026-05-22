@@ -91,6 +91,19 @@ export function useAnimationLoop({
                 controls?.target.addScaledVector(right, speed)
             }
 
+            const renderDistance = 60;
+
+            scene.traverse((obj) => {
+                if (!obj.userData.isChunk) return;
+
+                const center = obj.userData.chunkCenter as THREE.Vector3;
+                const radius = obj.userData.chunkRadius as number;
+
+                const dist = camera.position.distanceTo(center);
+
+                obj.visible = dist - radius < renderDistance;
+            });
+
             statsRef.current?.end()
             animationRef.current = requestAnimationFrame(animate)
         }

@@ -62,7 +62,7 @@ export default function CA2DConfig({ values, onChange }: CA2DConfigProps) {
         <SliderField
           label="Grid Size"
           value={values.gridSize}
-          min={16} max={128} step={8}
+          min={16} max={320} step={16}
           onChange={v => set("gridSize", v)}
         />
         <SliderField

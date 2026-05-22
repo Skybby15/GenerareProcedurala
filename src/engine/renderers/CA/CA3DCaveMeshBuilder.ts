@@ -2,161 +2,151 @@ import * as THREE from "three";
 import type { Object3D } from "three";
 import type { IMeshBuilder } from "../IMeshBuilder";
 import type { CAConfigValues } from "../../../helpers/configs/CAConfig";
-import { BufferGeometryUtils } from "three/examples/jsm/Addons.js";
 
-export class CA3DGreedyMeshBuilder
+export class CA3DCaveMeshBuilder
 implements IMeshBuilder<number[][][], CAConfigValues>
 {
-    build(
-        grid: number[][][],
-        config: CAConfigValues
-    ): Object3D {
+    private readonly chunkSize = 16;
+
+    build(grid: number[][][], config: CAConfigValues): Object3D {
         const group = new THREE.Group();
 
         const gridSize = config.gridSize;
-
-        const geometries: THREE.BufferGeometry[] = [];
-
-        // -------------------------------------------------
-        // Generate visible faces only
-        // -------------------------------------------------
-
-        const dirs = [
-            { dir: [ 1, 0, 0 ], normal: [ 1, 0, 0 ] },
-            { dir: [-1, 0, 0 ], normal: [-1, 0, 0 ] },
-            { dir: [ 0, 1, 0 ], normal: [ 0, 1, 0 ] },
-            { dir: [ 0,-1, 0 ], normal: [ 0,-1, 0 ] },
-            { dir: [ 0, 0, 1 ], normal: [ 0, 0, 1 ] },
-            { dir: [ 0, 0,-1 ], normal: [ 0, 0,-1 ] },
-        ];
-
         const half = gridSize / 2;
 
-        for (const { dir, normal } of dirs) {
+        const geometry = new THREE.PlaneGeometry(1, 1);
 
-            const [dx, dy, dz] = dir;
+        const material = new THREE.MeshStandardMaterial({
+            color: "#777777",
+            side: THREE.FrontSide,
+        });
 
-            for (let z = 0; z < gridSize; z++) {
-                for (let y = 0; y < gridSize; y++) {
-                    for (let x = 0; x < gridSize; x++) {
+        const directions = [
+            { dir: [1, 0, 0], rot: new THREE.Euler(0, Math.PI / 2, 0) },
+            { dir: [-1, 0, 0], rot: new THREE.Euler(0, -Math.PI / 2, 0) },
+            { dir: [0, 1, 0], rot: new THREE.Euler(-Math.PI / 2, 0, 0) },
+            { dir: [0, -1, 0], rot: new THREE.Euler(Math.PI / 2, 0, 0) },
+            { dir: [0, 0, 1], rot: new THREE.Euler(0, 0, 0) },
+            { dir: [0, 0, -1], rot: new THREE.Euler(0, Math.PI, 0) },
+        ] as const;
 
-                        if (grid[z][y][x] === 0)
-                            continue;
+        const isVisibleFace = (
+            x: number,
+            y: number,
+            z: number,
+            dx: number,
+            dy: number,
+            dz: number
+        ) => {
+            const nx = x + dx;
+            const ny = y + dy;
+            const nz = z + dz;
 
-                        const nx = x + dx;
-                        const ny = y + dy;
-                        const nz = z + dz;
+            return (
+                nx < 0 || ny < 0 || nz < 0 ||
+                nx >= gridSize ||
+                ny >= gridSize ||
+                nz >= gridSize ||
+                grid[nz][ny][nx] === 0
+            );
+        };
 
-                        let visible = false;
+        for (let cz = 0; cz < gridSize; cz += this.chunkSize) {
+            for (let cy = 0; cy < gridSize; cy += this.chunkSize) {
+                for (let cx = 0; cx < gridSize; cx += this.chunkSize) {
 
-                        if (
-                            nx < 0 || ny < 0 || nz < 0 ||
-                            nx >= gridSize ||
-                            ny >= gridSize ||
-                            nz >= gridSize
-                        ) {
-                            visible = true;
+                    const xEnd = Math.min(cx + this.chunkSize, gridSize);
+                    const yEnd = Math.min(cy + this.chunkSize, gridSize);
+                    const zEnd = Math.min(cz + this.chunkSize, gridSize);
+
+                    let faceCount = 0;
+
+                    // Count faces in chunk
+                    for (let z = cz; z < zEnd; z++) {
+                        for (let y = cy; y < yEnd; y++) {
+                            for (let x = cx; x < xEnd; x++) {
+                                if (grid[z][y][x] === 0) continue;
+
+                                for (const { dir } of directions) {
+                                    const [dx, dy, dz] = dir;
+
+                                    if (isVisibleFace(x, y, z, dx, dy, dz)) {
+                                        faceCount++;
+                                    }
+                                }
+                            }
                         }
-                        else if (grid[nz][ny][nx] === 0) {
-                            visible = true;
-                        }
-
-                        if (!visible)
-                            continue;
-
-                        const quad = this.createFaceGeometry(
-                            x - half,
-                            y - half,
-                            z - half,
-                            normal
-                        );
-
-                        geometries.push(quad);
                     }
+
+                    if (faceCount === 0) continue;
+
+                    const mesh = new THREE.InstancedMesh(
+                        geometry,
+                        material,
+                        faceCount
+                    );
+
+                    const matrix = new THREE.Matrix4();
+                    const quaternion = new THREE.Quaternion();
+                    const position = new THREE.Vector3();
+                    const scale = new THREE.Vector3(1, 1, 1);
+
+                    let index = 0;
+
+                    // Fill matrices
+                    for (let z = cz; z < zEnd; z++) {
+                        for (let y = cy; y < yEnd; y++) {
+                            for (let x = cx; x < xEnd; x++) {
+                                if (grid[z][y][x] === 0) continue;
+
+                                for (const { dir, rot } of directions) {
+                                    const [dx, dy, dz] = dir;
+
+                                    if (!isVisibleFace(x, y, z, dx, dy, dz)) {
+                                        continue;
+                                    }
+
+                                    position.set(
+                                        x + dx * 0.5 - half,
+                                        y + dy * 0.5 - half,
+                                        z + dz * 0.5 - half
+                                    );
+
+                                    quaternion.setFromEuler(rot);
+
+                                    matrix.compose(position, quaternion, scale);
+
+                                    mesh.setMatrixAt(index, matrix);
+                                    index++;
+                                }
+                            }
+                        }
+                    }
+
+                    mesh.instanceMatrix.setUsage(THREE.StaticDrawUsage);
+                    mesh.instanceMatrix.needsUpdate = true;
+
+                    const center = new THREE.Vector3(
+                        cx + (xEnd - cx) / 2 - half,
+                        cy + (yEnd - cy) / 2 - half,
+                        cz + (zEnd - cz) / 2 - half
+                    );
+
+                    mesh.position.set(0, 0, 0);
+
+                    mesh.userData.isChunk = true;
+                    mesh.userData.chunkCenter = center;
+                    mesh.userData.chunkRadius =
+                        Math.sqrt(3) * this.chunkSize * 0.5;
+
+                    mesh.computeBoundingBox();
+                    mesh.computeBoundingSphere();
+
+                    group.add(mesh);
                 }
             }
         }
 
-        // -------------------------------------------------
-        // Merge all faces
-        // -------------------------------------------------
-
-        if (geometries.length === 0) {
-            return group;
-        }
-
-        const merged = BufferGeometryUtils.mergeGeometries(geometries, false);
-        const finalGeometry = merged ?? geometries[0];
-
-        finalGeometry.computeVertexNormals();
-
-        const material =
-            new THREE.MeshStandardMaterial({
-                color: "#777777",
-                side: THREE.DoubleSide
-            });
-
-        const mesh = new THREE.Mesh(finalGeometry, material);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-
-        group.add(mesh);
-
         return group;
-    }
-
-    // -------------------------------------------------
-    // Create quad face
-    // -------------------------------------------------
-
-    private createFaceGeometry(
-        x: number,
-        y: number,
-        z: number,
-        normal: number[]
-    ) {
-
-        const [nx, ny, nz] = normal;
-
-        const geo = new THREE.PlaneGeometry(1, 1);
-
-        const mesh = new THREE.Mesh(geo);
-
-        mesh.position.set(x, y, z);
-
-        if (nx === 1) {
-            mesh.rotation.y = -Math.PI / 2;
-            mesh.position.x += 0.5;
-        }
-
-        if (nx === -1) {
-            mesh.rotation.y = Math.PI / 2;
-            mesh.position.x -= 0.5;
-        }
-
-        if (ny === 1) {
-            mesh.rotation.x = -Math.PI / 2;
-            mesh.position.y += 0.5;
-        }
-
-        if (ny === -1) {
-            mesh.rotation.x = Math.PI / 2;
-            mesh.position.y -= 0.5;
-        }
-
-        if (nz === 1) {
-            mesh.position.z += 0.5;
-        }
-
-        if (nz === -1) {
-            mesh.rotation.y = Math.PI;
-            mesh.position.z -= 0.5;
-        }
-
-        mesh.updateMatrix();
-
-        geo.applyMatrix4(mesh.matrix);
-
-        return geo;
     }
 }

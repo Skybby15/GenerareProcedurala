@@ -7,6 +7,12 @@ export type DLAConfigValues = BasicConfigValues & {
 
     particles: number
     steps: number
+
+    stickRadius: number
+    stickProximity: number
+
+    spawnBehaviour: "edge" | "emptySpot" | "anywhere" //not implemented
+
 }
 
 export class DLAConfigPresets {
@@ -18,5 +24,11 @@ export class DLAConfigPresets {
         
         particles: 1000,
         steps: 100,
+
+        stickRadius: 1,
+        stickProximity: 1,
+
+        spawnBehaviour: "edge" //not implemented
+
     }
 }

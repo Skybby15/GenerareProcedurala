@@ -1,6 +1,7 @@
 
 
 import * as Styled from "./helpers/ui/StyledPrimitives";
+import { useRef } from "react";
 import CA2DScene from "./showcase/CA/CAScenePage";
 import { CAConfigPresets } from "./helpers/configs/CAConfig";
 
@@ -28,12 +29,28 @@ const sectionItems = [
 ];
 
 export default function Home() {
+
+  const navigateToLab = () => {
+    navigation.navigate("/lab")
+  }
+
+  const homeContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const handleHomeClick = () => {
+    const el = homeContainerRef.current;
+    if (el && typeof el.scrollTo === "function") {
+      el.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (el) {
+      el.scrollTop = 0;
+    }
+  }
+
   return (
     <>
       <Styled.GlobalStyle />
       <Styled.Shell>
-        <Styled.TopBar>
-          <Styled.HomeBtn>
+          <Styled.TopBar>
+          <Styled.HomeBtn onClick={handleHomeClick}>
             <Styled.HomeIcon className="home-icon" viewBox="0 0 16 16">
               <path d="M1 7L8 1L15 7" />
               <path d="M3 5.5V14H6.5V10H9.5V14H13V5.5" />
@@ -44,11 +61,16 @@ export default function Home() {
             <Styled.HomeDot className="home-dot" />
           </Styled.HomeBtn>
           <Styled.ModeSelector>
-            <Styled.ModeTab $active>Showcase</Styled.ModeTab>
+            <Styled.ModeTab 
+              $active
+              onClick={navigateToLab}
+            >
+              Showcase
+            </Styled.ModeTab>
           </Styled.ModeSelector>
         </Styled.TopBar>
 
-        <Styled.HomeContainer>
+        <Styled.HomeContainer ref={homeContainerRef}>
           <Styled.HeroPanel>
             <Styled.PanelLabel>
               <span className="tag">CUSTOM MODEL //</span>

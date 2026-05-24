@@ -1,23 +1,22 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/Addons.js'
 import { Pipeline } from '../pipeline/Pipeline'
 import type { ISceneMode } from '../scenemodes/ISceneMode'
 import type { BasicConfigValues } from '../../helpers/types/BasicConfig'
 import type { GeneratorType } from '../../helpers/types/GeneratorTypes'
+import { CancelledGenerationError } from '../../helpers/exceptions/CancelledGenerationError'
 
 export class SceneManager<TGridData> {
     private scene: THREE.Scene
     private camera: THREE.Camera
-    private controls: OrbitControls
+    private currentWorker?: Worker
+    private currentWorkerReject?: (reason?: any) => void
 
     constructor(
         scene: THREE.Scene,
         camera: THREE.Camera,
-        controls: OrbitControls
     ) {
         this.scene = scene
         this.camera = camera
-        this.controls = controls
     }
 
     async loadAsync(
@@ -26,21 +25,27 @@ export class SceneManager<TGridData> {
         config: BasicConfigValues,
         type: GeneratorType,
     ) {
+        try{
+            this.dispose()
+    
+            const grid = await this.generateGridAsync(type,config)
+    
+            const worldObject = pipeline.run(grid,config)
+    
+            mode.setup(
+                config,
+                this.scene,
+                this.camera,
+            )
+    
+            this.scene.add(worldObject)
+        } catch (err){
+            if(err instanceof CancelledGenerationError)
+                return
+            else
+                throw err
+        }
 
-        this.dispose()
-
-        const grid = await this.generateGridAsync(type,config)
-
-        const worldObject = pipeline.run(grid,config)
-
-        mode.setup(
-            config,
-            this.scene,
-            this.camera,
-            this.controls
-        )
-
-        this.scene.add(worldObject)
     }
 
     private dispose() {
@@ -64,18 +69,59 @@ export class SceneManager<TGridData> {
         type: GeneratorType,
         config: BasicConfigValues
     ): Promise<TGridData> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
+            // If there's an existing worker running, cancel it before starting a new one
+            if (this.currentWorker) {
+                try {
+                    this.currentWorker.terminate()
+                } catch (e) {
+                    console.error(e)
+                }
+                if (this.currentWorkerReject) {
+                    const err: any = new CancelledGenerationError()
+                    err.cancelled = true
+                    this.currentWorkerReject(err)
+                }
+                this.currentWorker = undefined
+                this.currentWorkerReject = undefined
+            }
+
             const worker = new Worker(
                 new URL("../../helpers/workers/generatorWorker.ts", import.meta.url),
                 { type: "module" }
             );
 
-            worker.onmessage = (ev) => {
-                resolve(ev.data.grid);
-                worker.terminate();
-            };
+            this.currentWorker = worker
+            this.currentWorkerReject = reject
 
-            worker.postMessage({ type, config });
+            worker.onmessage = (ev) => {
+                // only resolve if this worker is still the active one
+                if (this.currentWorker === worker) {
+                    resolve(ev.data.grid)
+                    try { worker.terminate() } catch (e) { 
+                        console.error(e)
+                    }
+                    this.currentWorker = undefined
+                    this.currentWorkerReject = undefined
+                } else {
+                    try { worker.terminate() } catch (e) { 
+                        console.error(e)
+                    }
+                }
+            }
+
+            worker.onerror = (ev) => {
+                if (this.currentWorker === worker) {
+                    reject(ev.error ?? new Error('Worker error'))
+                    this.currentWorker = undefined
+                    this.currentWorkerReject = undefined
+                }
+                try { worker.terminate() } catch (e) { 
+                    console.error(e)
+                }
+            }
+
+            worker.postMessage({ type, config })
         });
     }
 }

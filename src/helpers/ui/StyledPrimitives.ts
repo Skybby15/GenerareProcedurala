@@ -22,7 +22,11 @@ export const GlobalStyle = createGlobalStyle`
     --panel-radius: 2px;
   }
 
-  html, body, #root { height: 100%; width: 100%; overflow: hidden; }
+  html, body, #root {
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
 
   body {
     background: var(--bg);
@@ -60,9 +64,10 @@ export const homePulse = keyframes`
 export const Shell = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
 
   /* Subtle scanline overlay */
@@ -108,6 +113,18 @@ export const HeroSplit = styled.div`
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
   }
+`;
+
+export const AlgorithmDetailsPanel = styled.section`
+  flex-shrink: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+`;
+
+export const AlgorithmDetailsScroll = styled.div`
+  padding: 20px;
 `;
 
 export const PlaceholderScene = styled.div`
@@ -339,7 +356,8 @@ export const ModeTab = styled.button<{ $active: boolean }>`
 
 export const Workspace = styled.main`
   display: flex;
-  flex: 1;
+  height: calc(100vh - 48px);
+  flex-shrink: 0;
   overflow: hidden;
   gap: 1px;
   background: var(--border);
@@ -481,6 +499,7 @@ export const SceneMountRef = styled.div`
   width: 100%;
   height: 100%;
   z-index: 1;
+  outline: none;
 `;
 
 // ─── Config panel ─────────────────────────────────────────────────────────────

@@ -11,7 +11,9 @@ export type SceneConfigPair = {
     values: any;
     onChange: (values: any) => void;
   }>;
+  details: React.ComponentType<any> | null;
   defaultConfig: any;
+
 };
 
 
@@ -40,6 +42,11 @@ export default function Lab({ pairs }: LabProps) {
     setConfigValues(prev => ({ ...prev, [activePairId]: activePair.defaultConfig }));
   }, [activePair, activePairId]);
 
+  const navigateToHome = () => {
+    console.log("navigate")
+    navigation.navigate("/")
+  }
+
   return (
     <>
       <Styled.GlobalStyle />
@@ -48,13 +55,17 @@ export default function Lab({ pairs }: LabProps) {
         {/* ── Top bar ── */}
         <Styled.TopBar>
           {/* Home button */}
-          <Styled.HomeBtn>
+          <Styled.HomeBtn
+            onClick={navigateToHome}
+          >
             <Styled.HomeIcon className="home-icon" viewBox="0 0 16 16">
               <path d="M1 7L8 1L15 7" />
               <path d="M3 5.5V14H6.5V10H9.5V14H13V5.5" />
             </Styled.HomeIcon>
-            <Styled.HomeLabelGroup>
-              <Styled.HomeLabel className="home-label">Home</Styled.HomeLabel>
+            <Styled.HomeLabelGroup            >
+              <Styled.HomeLabel className="home-label">
+                Home
+              </Styled.HomeLabel>
             </Styled.HomeLabelGroup>
             <Styled.HomeDot className="home-dot" />
           </Styled.HomeBtn>
@@ -135,9 +146,23 @@ export default function Lab({ pairs }: LabProps) {
               <Styled.Btn $primary>Generate</Styled.Btn>
             </Styled.ConfigFooter>
           </Styled.ConfigPanel>
-
         </Styled.Workspace>
+        {activePair && (
+          <Styled.AlgorithmDetailsPanel>
+            <Styled.PanelLabel>
+              <span className="tag">DETAILS //</span>
+              <span className="title">{activePair.label}</span>
+            </Styled.PanelLabel>
 
+            <Styled.AlgorithmDetailsScroll>
+              {activePair.details ? (
+                <activePair.details />
+              ) : (
+                <p>No additional details available.</p>
+              )}
+            </Styled.AlgorithmDetailsScroll>
+          </Styled.AlgorithmDetailsPanel>
+        )}
       </Styled.Shell>
     </>
   );

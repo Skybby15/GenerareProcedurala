@@ -82,6 +82,18 @@ export default function DLAConfigPage({ values, onChange }: DLAConfigProps) {
                 min={10} max={10_000} step={10}
                 onChange={v => set("steps", v)}
             />
+            <SliderField
+                label="Stick Radius"
+                value={values.stickRadius}
+                min={1} max={values.gridSize} step={1}
+                onChange={v => set("stickRadius", v)}
+            />
+            <SliderField
+                label="Stick Proximity"
+                value={values.stickProximity}
+                min={1} max={values.gridSize/2} step={1}
+                onChange={v => set("stickProximity", v)}
+            />
 
             <ComplexityPreview
                 particles={values.particles}

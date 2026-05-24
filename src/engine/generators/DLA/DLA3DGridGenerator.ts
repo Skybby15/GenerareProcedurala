@@ -13,6 +13,8 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
             gridSize,
             particles,
             steps,
+            stickRadius,
+            stickProximity,
         } = config;
 
         const grid: boolean[][][] = [];
@@ -38,6 +40,8 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
             steps,
             gridSize,
             grid,
+            stickRadius,
+            stickProximity,
             rng
         );
 
@@ -49,6 +53,8 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
         steps: number,
         gridSize: number,
         grid: boolean[][][],
+        stickRadius: number,
+        stickProximity: number,
         rng: () => number
     ) {
         for (let p = 0; p < particles; p++) {
@@ -72,15 +78,23 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
                 y = (y + gridSize) % gridSize;
                 z = (z + gridSize) % gridSize;
 
-                if (
-                    grid[z][y][(x + 1) % gridSize] ||
-                    grid[z][y][(x - 1 + gridSize) % gridSize] ||
-                    grid[z][(y + 1) % gridSize][x] ||
-                    grid[z][(y - 1 + gridSize) % gridSize][x] ||
-                    grid[(z + 1) % gridSize][y][x] ||
-                    grid[(z - 1 + gridSize) % gridSize][y][x]
-                ) {
-                    grid[z][y][x] = true;
+                if (this.touchesCluster(
+                    grid,
+                    gridSize,
+                    x,
+                    y,
+                    z,
+                    stickProximity
+                )) {
+                    this.fillSphere(
+                        grid,
+                        gridSize,
+                        x,
+                        y,
+                        z,
+                        stickRadius
+                    );
+
                     break;
                 }
             }
@@ -109,5 +123,86 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
             return { x: rng() * gridSize, y: rng() * gridSize, z: 0 };
 
         return { x: rng() * gridSize, y: rng() * gridSize, z: gridSize - 1 };
+    }
+
+    private touchesCluster(
+        grid: boolean[][][],
+        gridSize: number,
+        cx: number,
+        cy: number,
+        cz: number,
+        radius: number
+    ) {
+        const r2 = radius * radius;
+
+        for (let z = -radius; z <= radius; z++) {
+            for (let y = -radius; y <= radius; y++) {
+                for (let x = -radius; x <= radius; x++) {
+
+                    if (x === 0 && y === 0 && z === 0)
+                        continue;
+
+                    const dist2 =
+                        x * x +
+                        y * y +
+                        z * z;
+
+                    if (dist2 > r2)
+                        continue;
+
+                    const nx =
+                        (cx + x + gridSize) % gridSize;
+
+                    const ny =
+                        (cy + y + gridSize) % gridSize;
+
+                    const nz =
+                        (cz + z + gridSize) % gridSize;
+
+                    if (grid[nz][ny][nx]) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private fillSphere(
+        grid: boolean[][][],
+        gridSize: number,
+        cx: number,
+        cy: number,
+        cz: number,
+        radius: number
+    ) {
+        const r2 = radius * radius;
+
+        for (let z = -radius; z <= radius; z++) {
+            for (let y = -radius; y <= radius; y++) {
+                for (let x = -radius; x <= radius; x++) {
+
+                    const dist2 =
+                        x * x +
+                        y * y +
+                        z * z;
+
+                    if (dist2 > r2)
+                        continue;
+
+                    const nx =
+                        (cx + x + gridSize) % gridSize;
+
+                    const ny =
+                        (cy + y + gridSize) % gridSize;
+
+                    const nz =
+                        (cz + z + gridSize) % gridSize;
+
+                    grid[nz][ny][nx] = true;
+                }
+            }
+        }
     }
 }

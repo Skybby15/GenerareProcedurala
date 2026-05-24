@@ -1,22 +1,21 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, type RefObject } from "react"
 import * as THREE from "three"
 import Stats from "three/examples/jsm/libs/stats.module.js"
-import { OrbitControls } from "three/examples/jsm/Addons.js"
 
 export function useAnimationLoop({
     mountRef,
     sceneRef,
     cameraRef,
     rendererRef,
-    controlsRef,
-    keysRef
+    keysRef,
+    focusedRef
 }: {
-    mountRef: React.RefObject<HTMLDivElement | null>
-    sceneRef: React.RefObject<THREE.Scene | null>
-    cameraRef: React.RefObject<THREE.PerspectiveCamera | null>
-    rendererRef: React.RefObject<THREE.WebGLRenderer | null>
-    controlsRef: React.RefObject<OrbitControls | null>
-    keysRef: React.RefObject<Record<string, boolean>>
+    mountRef: RefObject<HTMLDivElement | null>
+    sceneRef: RefObject<THREE.Scene | null>
+    cameraRef: RefObject<THREE.PerspectiveCamera | null>
+    rendererRef: RefObject<THREE.WebGLRenderer | null>
+    keysRef: RefObject<Record<string, boolean>>
+    focusedRef: RefObject<boolean>
 }) {
     const animationRef = useRef<number | null>(null)
     const statsRef = useRef<Stats | null>(null)
@@ -37,8 +36,8 @@ export function useAnimationLoop({
 
         if (!scene || !camera || !renderer || !mount) return
 
-        const controls = controlsRef.current
         const keys = keysRef.current
+        mount.tabIndex = 0
 
         if (!statsRef.current) {
 
@@ -54,7 +53,6 @@ export function useAnimationLoop({
         const animate = () => {
             statsRef.current?.begin()
 
-            controls?.update()
             renderer.render(scene, camera)
 
             let speed = 0.2
@@ -69,26 +67,24 @@ export function useAnimationLoop({
 
             right.set(-flatForward.z, 0, flatForward.x)
 
-            if (keys["ShiftLeft"]) speed *= 2
+            if(focusedRef.current){
+                if (keys["ShiftLeft"]) speed *= 2
 
-            if (keys["KeyW"]) {
-                camera.position.addScaledVector(forward, speed)
-                controls?.target.addScaledVector(forward, speed)
-            }
+                if (keys["KeyW"]) {
+                    camera.position.addScaledVector(forward, speed)
+                }
 
-            if (keys["KeyS"]) {
-                camera.position.addScaledVector(forward, -speed)
-                controls?.target.addScaledVector(forward, -speed)
-            }
+                if (keys["KeyS"]) {
+                    camera.position.addScaledVector(forward, -speed)
+                }
 
-            if (keys["KeyA"]) {
-                camera.position.addScaledVector(right, -speed)
-                controls?.target.addScaledVector(right, -speed)
-            }
+                if (keys["KeyD"]) {
+                    camera.position.addScaledVector(right, speed)
+                }
 
-            if (keys["KeyD"]) {
-                camera.position.addScaledVector(right, speed)
-                controls?.target.addScaledVector(right, speed)
+                if (keys["KeyA"]) {
+                    camera.position.addScaledVector(right, -speed)
+                }
             }
 
             const renderDistance = 60;
@@ -119,5 +115,5 @@ export function useAnimationLoop({
             statsRef.current = null
         }
 
-    },[mountRef,cameraRef,controlsRef,keysRef,sceneRef,rendererRef])
+    },[mountRef,cameraRef,keysRef,sceneRef,rendererRef,focusedRef])
 }

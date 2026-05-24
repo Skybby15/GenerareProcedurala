@@ -1,34 +1,27 @@
 import { useEffect, useRef, type RefObject } from "react"
 import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/Addons.js"
+import { PointerLockControls } from "three/examples/jsm/Addons.js"
 
 export function useCameraControls(
     cameraRef: RefObject<THREE.PerspectiveCamera | null>,
-    rendererRef: RefObject<THREE.WebGLRenderer | null>
+    rendererRef: RefObject<THREE.WebGLRenderer | null>,
+    mountRef: RefObject<HTMLDivElement | null>
 ) {
-    const controlsRef = useRef<OrbitControls | null>(null)
+    const controlsRef = useRef<PointerLockControls | null>(null)
     const keysRef = useRef<Record<string, boolean>>({})
+    const focusedRef = useRef(false)
+    
 
     useEffect(() => {
         const camera = cameraRef.current
         const renderer = rendererRef.current
+        const mount = mountRef.current
 
-        if (!camera || !renderer) return
+        if (!camera || !renderer || !mount) return
 
-        const controls = new OrbitControls(camera, renderer.domElement)
-        controls.enableDamping = true
-        controls.enableZoom = true
-        controls.zoomSpeed = 1.3
-        controls.minDistance = 5
-        controls.maxDistance = 900
-
-        if (controlsRef.current) {
-            controls.target.copy(controlsRef.current.target)
-        }
-
+        const controls = new PointerLockControls(camera, renderer.domElement)
         controlsRef.current = controls
 
-        // 🎮 keyboard input
         const onKeyDown = (e: KeyboardEvent) => {
             keysRef.current[e.code] = true
         }
@@ -37,6 +30,36 @@ export function useCameraControls(
             keysRef.current[e.code] = false
         }
 
+        renderer.domElement.addEventListener("click", () => {
+            if (controls.isLocked) {
+                controls.unlock();
+            } else {
+                controls.lock();
+            }
+        });
+
+        const onFocus = () => {
+            focusedRef.current = true
+        }
+
+        const onBlur = () => {
+            focusedRef.current = false
+
+            for (const key in keysRef.current) {
+                keysRef.current[key] = false
+            }
+        }
+
+        const onPointerDown = () => {
+            mount.focus({
+                preventScroll: true
+            })
+        }
+
+        mount.addEventListener("focus", onFocus)
+        mount.addEventListener("blur", onBlur)
+        mount.addEventListener("pointerdown", onPointerDown)
+
         window.addEventListener("keydown", onKeyDown)
         window.addEventListener("keyup", onKeyUp)
 
@@ -44,12 +67,16 @@ export function useCameraControls(
             controls.dispose()
             window.removeEventListener("keydown", onKeyDown)
             window.removeEventListener("keyup", onKeyUp)
+
+            mount.removeEventListener("focus", onFocus)
+            mount.removeEventListener("blur", onBlur)
+            mount.removeEventListener("pointerdown", onPointerDown)
         }
 
-    }, [cameraRef, rendererRef])
+    }, [cameraRef, rendererRef, mountRef])
 
     return {
-        controlsRef,
+        focusedRef,
         keysRef
     }
 }

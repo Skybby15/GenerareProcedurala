@@ -4,7 +4,7 @@ import { CAConfigPresets } from './helpers/configs/CAConfig';
 import { DLAConfigPresets } from './helpers/configs/DLAConfig';
 import { PNConfigPresets } from './helpers/configs/PNConfig';
 import { VDConfigPresets } from './helpers/configs/VDConfig';
-import Lab from './Lab'
+import Lab, { type SceneConfigPair } from './Lab'
 import CA2DConfig from './showcase/CA/CAConfigPage';
 import CA2DScene from './showcase/CA/CAScenePage';
 import DLAConfigPage from './showcase/DLA/DLAConfigPage';
@@ -14,14 +14,16 @@ import PNScenePage from './showcase/PN/PNScenePage';
 import VDConfigPage from './showcase/VD/VDConfigPage';
 import VDScenePage from './showcase/VD/VDScenePage';
 import Home from './Home';
+import CADetailsPage from './showcase/CA/CADetailsPage';
 
 
-const pairs = [
+const pairs : SceneConfigPair[] = [
   {
     id: "ca",
     label: "Cellular Automata",
     scene: CA2DScene,
     config: CA2DConfig,
+    details: CADetailsPage,
     defaultConfig: CAConfigPresets.default,
   },
   {
@@ -29,6 +31,7 @@ const pairs = [
     label: "Voronoi Diagrams",
     scene: VDScenePage,
     config: VDConfigPage,
+    details: null,
     defaultConfig: VDConfigPresets.default,
   },
   {
@@ -36,6 +39,7 @@ const pairs = [
     label: "Perlin Noise",
     scene: PNScenePage,
     config: PNConfigPage,
+    details: null,
     defaultConfig: PNConfigPresets.default,
   },
   {
@@ -43,10 +47,12 @@ const pairs = [
     label: "Diffusion Limited Aggregation",
     scene: DLAScenePage,
     config: DLAConfigPage,
+    details: null,
     defaultConfig: DLAConfigPresets.default,
   },
 ];
-//<Lab pairs={pairs} />
+
+
 export default function App() {
   return (
     <BrowserRouter>

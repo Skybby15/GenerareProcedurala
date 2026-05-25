@@ -22,8 +22,8 @@ export class DLAConfigPresets {
 
         mode: "2DSmooth",
         
-        particles: 1000,
-        steps: 100,
+        particles: 3000,
+        steps: 3000,
 
         stickRadius: 1,
         stickProximity: 1,

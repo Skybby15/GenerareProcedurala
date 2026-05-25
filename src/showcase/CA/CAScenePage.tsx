@@ -82,7 +82,7 @@ export default function CAScenePage({ config, settings, setSettings }: CAScenePr
       ...prev,
       resetCameraPosition: true,
     }));
-  })
+  },[setSettings])
 
   return (
     <Styled.SceneContainer>

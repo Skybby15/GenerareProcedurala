@@ -85,13 +85,13 @@ export default function CA2DConfig({ values, onChange }: CA2DConfigProps) {
         <SliderField
           label="Min Birth Neighbors"
           value={values.minimumBirthNeighbors}
-          min={0} max={8}
+          min={0} max={values.maximumBirthNeighbors}
           onChange={v => set("minimumBirthNeighbors", v)}
         />
         <SliderField
           label="Max Birth Neighbors"
           value={values.maximumBirthNeighbors}
-          min={0} max={8}
+          min={values.minimumBirthNeighbors} max={values.mode != "Cave3D" ? 8 : 26}
           onChange={v => set("maximumBirthNeighbors", v)}
         />
       </Styled.Section>
@@ -102,13 +102,13 @@ export default function CA2DConfig({ values, onChange }: CA2DConfigProps) {
         <SliderField
           label="Min Survival Neighbors"
           value={values.minimumSurvivalNeighbors}
-          min={0} max={8}
+          min={0} max={values.maximumSurvivalNeighbors}
           onChange={v => set("minimumSurvivalNeighbors", v)}
         />
         <SliderField
           label="Max Survival Neighbors"
           value={values.maximumSurvivalNeighbors}
-          min={0} max={8}
+          min={values.minimumSurvivalNeighbors} max={values.mode != "Cave3D" ? 8 : 26}
           onChange={v => set("maximumSurvivalNeighbors", v)}
         />
       </Styled.Section>

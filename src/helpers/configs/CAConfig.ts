@@ -24,18 +24,18 @@ export type CAConfigValues = BasicConfigValues & {
 export class CAConfigPresets {
     static default: CAConfigValues = {
         seed: '0',
-        gridSize: 100,
+        gridSize: 160,
 
         mode:"Smooth2D",
 
-        initialGridDensity: 50,
-        steps: 10,
+        initialGridDensity: 55,
+        steps: 6,
 
-        minimumBirthNeighbors: 0,
-        maximumBirthNeighbors: 4,
+        minimumBirthNeighbors: 3,
+        maximumBirthNeighbors: 8,
 
-        minimumSurvivalNeighbors: 2,
-        maximumSurvivalNeighbors: 3,
+        minimumSurvivalNeighbors: 0,
+        maximumSurvivalNeighbors: 7,
 
         edgeBehavior: "dead",
 
@@ -63,4 +63,5 @@ export class CAConfigPresets {
         allowIsolatedStructures: true,
         minimumStructureSize: -1
     }
+
 }

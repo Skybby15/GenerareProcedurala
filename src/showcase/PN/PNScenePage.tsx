@@ -63,14 +63,16 @@ export default function PNScenePage({ config, settings, setSettings }: PNScenePr
             ...prev,
             resetCameraPosition: true,
         }));
-    })
+    },[setSettings])
 
     return (
     <Styled.SceneContainer>
         <Styled.SceneMountRef
             ref={mountRef}
         >
-            <SceneSettingsComponent settings={settings} setSettings={setSettings} />
+            {!loading &&
+                <SceneSettingsComponent settings={settings} setSettings={setSettings} />
+            }
         </Styled.SceneMountRef>
 
         {loading && (

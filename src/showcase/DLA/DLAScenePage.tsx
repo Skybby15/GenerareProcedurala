@@ -75,7 +75,7 @@ export default function DLAScenePage({ config, settings, setSettings }: DLAScene
             ...prev,
             resetCameraPosition: true,
         }));
-    })
+    },[setSettings])
 
     return (
         <Styled.SceneContainer

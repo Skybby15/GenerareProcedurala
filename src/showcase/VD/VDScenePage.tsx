@@ -39,6 +39,20 @@ export default function VDScenePage({ config, settings, setSettings }: VD2DScene
         };
     }, []);
 
+    useEffect(()=>{
+        setSettings((prev) => ({
+            ...prev,
+            resetCameraPosition: true,
+        }));
+
+        return(()=>{
+            setSettings((prev) => ({
+                ...prev,
+                resetCameraPosition: true,
+            }));
+        })
+    },[setSettings])
+
     const { 
         loading 
     } = useGeneratedScene({
@@ -63,13 +77,6 @@ export default function VDScenePage({ config, settings, setSettings }: VD2DScene
         mountRef,
         cameraRef,
         sceneRef
-    })
-
-    useEffect(()=>{
-        setSettings((prev) => ({
-            ...prev,
-            resetCameraPosition: true,
-        }));
     })
 
     return (

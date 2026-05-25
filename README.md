@@ -1,6 +1,6 @@
 # Demo
 
 ![Demo](https://github.com/Skybby15/GenerareProcedurala/blob/main/src/assets/preview.gif)
-(Se vede mai bine de fapt , nu stiu de ce gif-ul are pete albastre)
+(Posibil ca gif-ul sa nu se incarce ok, dar aplicatia arata mai bine)
 
 Extended video: [HERE](https://github.com/Skybby15/GenerareProcedurala/blob/main/src/assets/Demo.mp4)

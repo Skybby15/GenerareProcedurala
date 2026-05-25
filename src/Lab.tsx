@@ -1,12 +1,17 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, type Dispatch, type SetStateAction } from "react";
 import * as Styled from "./helpers/ui/StyledPrimitives";
+import { SceneSettings, type SceneSettingsValues } from "./helpers/types/SceneSettings";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type SceneConfigPair = {
   id: string;
   label: string;
-  scene: React.ComponentType<{ config: any }>;
+  scene: React.ComponentType<{ 
+    config: any
+    settings: SceneSettingsValues;
+    setSettings: Dispatch<SetStateAction<SceneSettingsValues>>;
+  }>;
   config: React.ComponentType<{
     values: any;
     onChange: (values: any) => void;
@@ -22,6 +27,7 @@ interface LabProps {
 }
 
 export default function Lab({ pairs }: LabProps) {
+  const [sceneSettings, setSceneSettings] = useState<SceneSettingsValues>(SceneSettings.default)
   const [activePairId, setActivePairId] = useState<string>(pairs[0]?.id ?? "");
   const [configValues, setConfigValues] = useState<Record<string, unknown>>(
     Object.fromEntries(pairs.map(p => [p.id, p.defaultConfig]))
@@ -101,7 +107,11 @@ export default function Lab({ pairs }: LabProps) {
 
             <Styled.SceneMount>
               {activePair ? (
-                <activePair.scene config={activeConfig} />
+                <activePair.scene 
+                  config={activeConfig}
+                  settings={sceneSettings}
+                  setSettings={setSceneSettings} 
+                />
               ) : (
                 <Styled.ScenePlaceholder>
                   <div className="grid-bg" />

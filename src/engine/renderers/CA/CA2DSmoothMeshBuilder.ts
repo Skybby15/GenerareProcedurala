@@ -8,7 +8,7 @@ implements IMeshBuilder<number[][], CAConfigValues>
 {
     build(
         grid: number[][],
-        config: CAConfigValues
+        config: CAConfigValues,
     ): Object3D {
 
         const group = new THREE.Group();

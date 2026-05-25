@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { SceneManager } from '../../engine/manager/SceneManager';
 import type { Pipeline } from '../../engine/pipeline/Pipeline';
 import type { BasicConfigValues } from '../types/BasicConfig';
+import type { SceneSettingsValues } from '../types/SceneSettings';
 
 export type setupFunction<TConfig extends BasicConfigValues> = (config: TConfig) => SceneSetup<TConfig>
 
@@ -20,6 +21,7 @@ type UseGeneratedSceneArgs<TConfig extends BasicConfigValues> = {
   sceneRef: React.RefObject<THREE.Scene | null>;
   cameraRef: React.RefObject<THREE.Camera | null>;
   getSetup: setupFunction<TConfig>;
+  settings: SceneSettingsValues;
   debounceMs?: number;
 };
 
@@ -29,6 +31,7 @@ export function useGeneratedScene<TConfig extends BasicConfigValues>({
   sceneRef,
   cameraRef,
   getSetup,
+  settings,
   debounceMs = 150,
 }: UseGeneratedSceneArgs<TConfig>) {
   const [loading, setLoading] = useState(false);
@@ -69,6 +72,7 @@ export function useGeneratedScene<TConfig extends BasicConfigValues>({
         setup.sceneMode,
         setup.pipeline,
         config,
+        settings,
         setup.type
       );
 

@@ -1,6 +1,7 @@
 import * as Styled from "../../helpers/ui/StyledPrimitives"
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, type Dispatch, type SetStateAction } from "react";
 import type { CAConfigValues } from "../../helpers/configs/CAConfig";
+import type { SceneSettingsValues } from "../../helpers/types/SceneSettings";
 import { useThreeScene } from "../../helpers/hooks/useThreeScene";
 import { useCameraControls } from "../../helpers/hooks/useCameraControls";
 import { useAnimationLoop } from "../../helpers/hooks/useAnimationLoop";
@@ -11,13 +12,17 @@ import { CA2DBlockMeshBuilder } from "../../engine/renderers/CA/CA2DBlockMeshBui
 import { CA3DCaveMeshBuilder } from "../../engine/renderers/CA/CA3DCaveMeshBuilder";
 import { useGeneratedScene, type setupFunction } from "../../helpers/hooks/useGeneratedScene";
 import { CaveSceneMode } from "../../engine/scenemodes/CaveSceneMode";
+import SceneSettingsComponent from "../SceneSettingsComponent";
 
-type CA2DSceneProps = {
+type CASceneProps = {
     config: CAConfigValues;
+    settings: SceneSettingsValues;
+    setSettings: Dispatch<SetStateAction<SceneSettingsValues>>;
 }
 
-export default function CA2DScene({ config }: CA2DSceneProps) {
+export default function CAScenePage({ config, settings, setSettings }: CASceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
+
   const {
     rendererRef,
     sceneRef,
@@ -60,6 +65,7 @@ export default function CA2DScene({ config }: CA2DSceneProps) {
       sceneRef,
       cameraRef,
       getSetup,
+      settings
   })
 
   useAnimationLoop({
@@ -71,11 +77,22 @@ export default function CA2DScene({ config }: CA2DSceneProps) {
     focusedRef
   })
 
+  useEffect(()=>{
+    setSettings((prev) => ({
+      ...prev,
+      resetCameraPosition: true,
+    }));
+  })
+
   return (
     <Styled.SceneContainer>
       <Styled.SceneMountRef
         ref={mountRef}
-      />
+      >
+        {!loading &&
+          <SceneSettingsComponent settings={settings} setSettings={setSettings} />
+        }
+      </Styled.SceneMountRef>
 
       {loading && (
         <Styled.LoadingSpinner/>

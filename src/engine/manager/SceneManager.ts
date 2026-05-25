@@ -4,6 +4,7 @@ import type { ISceneMode } from '../scenemodes/ISceneMode'
 import type { BasicConfigValues } from '../../helpers/types/BasicConfig'
 import type { GeneratorType } from '../../helpers/types/GeneratorTypes'
 import { CancelledGenerationError } from '../../helpers/exceptions/CancelledGenerationError'
+import type { SceneSettingsValues } from '../../helpers/types/SceneSettings'
 
 export class SceneManager<TGridData> {
     private scene: THREE.Scene
@@ -23,6 +24,7 @@ export class SceneManager<TGridData> {
         mode: ISceneMode<BasicConfigValues>,
         pipeline: Pipeline<TGridData>,
         config: BasicConfigValues,
+        settings: SceneSettingsValues,
         type: GeneratorType,
     ) {
         try{
@@ -36,6 +38,7 @@ export class SceneManager<TGridData> {
                 config,
                 this.scene,
                 this.camera,
+                settings
             )
     
             this.scene.add(worldObject)

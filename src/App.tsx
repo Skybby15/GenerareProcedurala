@@ -6,7 +6,7 @@ import { PNConfigPresets } from './helpers/configs/PNConfig';
 import { VDConfigPresets } from './helpers/configs/VDConfig';
 import Lab, { type SceneConfigPair } from './Lab'
 import CA2DConfig from './showcase/CA/CAConfigPage';
-import CA2DScene from './showcase/CA/CAScenePage';
+import CAScenePage from './showcase/CA/CAScenePage';
 import DLAConfigPage from './showcase/DLA/DLAConfigPage';
 import DLAScenePage from './showcase/DLA/DLAScenePage';
 import PNConfigPage from './showcase/PN/PNConfigPage';
@@ -21,7 +21,7 @@ const pairs : SceneConfigPair[] = [
   {
     id: "ca",
     label: "Cellular Automata",
-    scene: CA2DScene,
+    scene: CAScenePage,
     config: CA2DConfig,
     details: CADetailsPage,
     defaultConfig: CAConfigPresets.default,

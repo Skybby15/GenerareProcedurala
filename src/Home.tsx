@@ -2,8 +2,8 @@
 
 import * as Styled from "./helpers/ui/StyledPrimitives";
 import { useRef } from "react";
-import CA2DScene from "./showcase/CA/CAScenePage";
 import { CAConfigPresets } from "./helpers/configs/CAConfig";
+import CustomScenePage from "./showcase/CustomScenePage";
 
 const sectionItems = [
   {
@@ -78,7 +78,7 @@ export default function Home() {
             </Styled.PanelLabel>
             <Styled.HeroSplit>
               <Styled.PlaceholderScene>
-                <CA2DScene config={CAConfigPresets.default} />
+                <CustomScenePage config={CAConfigPresets.default} />
               </Styled.PlaceholderScene>
               <Styled.HeroContent>
                 <Styled.ModelBadge>Powered by Cellular Automata</Styled.ModelBadge>

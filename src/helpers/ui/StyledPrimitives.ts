@@ -499,7 +499,30 @@ export const SceneMountRef = styled.div`
   width: 100%;
   height: 100%;
   z-index: 1;
+  position: relative;
   outline: none;
+`;
+
+export const SceneSettingsButton = styled.button<{ $active: boolean }>`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: ${p => p.$active ? 'rgba(0, 212, 255, 0.2)' : 'rgba(13, 24, 32, 0.9)'};
+  color: ${p => p.$active ? 'var(--accent)' : '#ffffff'};
+  cursor: pointer;
+  z-index: 20;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: ${p => p.$active ? 'rgba(0, 212, 255, 0.25)' : 'rgba(18, 33, 45, 0.95)'};
+  }
 `;
 
 // ─── Config panel ─────────────────────────────────────────────────────────────

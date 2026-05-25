@@ -1,5 +1,5 @@
 import * as Styled from "../../helpers/ui/StyledPrimitives"
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, type Dispatch, type SetStateAction } from "react";
 import { useThreeScene } from "../../helpers/hooks/useThreeScene";
 import { useCameraControls } from "../../helpers/hooks/useCameraControls";
 import { useAnimationLoop } from "../../helpers/hooks/useAnimationLoop";
@@ -9,12 +9,16 @@ import type { VDConfigValues } from "../../helpers/configs/VDConfig";
 import { VDTerritoriesMeshBuilder } from "../../engine/renderers/VD/VDTerritoriesMeshBuilder";
 import { useMarkerPopup } from "../../helpers/hooks/useMarkerPopup";
 import { useGeneratedScene, type setupFunction } from "../../helpers/hooks/useGeneratedScene";
+import type { SceneSettingsValues } from "../../helpers/types/SceneSettings";
+import SceneSettingsComponent from "../SceneSettingsComponent";
 
 type VD2DSceneProps = {
-  config: VDConfigValues;
+    config: VDConfigValues;
+    settings: SceneSettingsValues;
+    setSettings: Dispatch<SetStateAction<SceneSettingsValues>>;
 }
 
-export default function VDScenePage({ config }: VD2DSceneProps) {
+export default function VDScenePage({ config, settings, setSettings }: VD2DSceneProps) {
     const mountRef = useRef<HTMLDivElement>(null);
     const {
         rendererRef,
@@ -42,7 +46,8 @@ export default function VDScenePage({ config }: VD2DSceneProps) {
         mountRef,
         sceneRef,
         cameraRef,
-        getSetup
+        getSetup,
+        settings,
     })
 
     useAnimationLoop({
@@ -60,12 +65,25 @@ export default function VDScenePage({ config }: VD2DSceneProps) {
         sceneRef
     })
 
+    useEffect(()=>{
+        setSettings((prev) => ({
+            ...prev,
+            resetCameraPosition: true,
+        }));
+    })
+
     return (
     <Styled.SceneContainer
     >
         <Styled.SceneMountRef
         ref={mountRef}
         >
+            {!loading && 
+                <SceneSettingsComponent 
+                    settings={settings}
+                    setSettings={setSettings}
+                />
+            }   
             {popup && (
                 <div
                     style={{

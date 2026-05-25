@@ -1,5 +1,5 @@
 import * as Styled from "../../helpers/ui/StyledPrimitives"
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, type Dispatch, type SetStateAction } from "react";
 import { useThreeScene } from "../../helpers/hooks/useThreeScene";
 import { useCameraControls } from "../../helpers/hooks/useCameraControls";
 import { useAnimationLoop } from "../../helpers/hooks/useAnimationLoop";
@@ -10,12 +10,16 @@ import { DLAPlaneMeshBuilder } from "../../engine/renderers/DLA/DLAPlaneMeshBuil
 import { CaveSceneMode } from "../../engine/scenemodes/CaveSceneMode";
 import { DLACaveMeshBuilder } from "../../engine/renderers/DLA/DLACaveMeshBuilder";
 import { useGeneratedScene, type setupFunction } from "../../helpers/hooks/useGeneratedScene";
+import type { SceneSettingsValues } from "../../helpers/types/SceneSettings";
+import SceneSettingsComponent from "../SceneSettingsComponent";
 
 type DLASceneProps = {
     config: DLAConfigValues;
+    settings: SceneSettingsValues;
+    setSettings: Dispatch<SetStateAction<SceneSettingsValues>>;
 }
 
-export default function DLAScenePage({ config }: DLASceneProps) {
+export default function DLAScenePage({ config, settings, setSettings }: DLASceneProps) {
     const mountRef = useRef<HTMLDivElement>(null);
     const {
         rendererRef,
@@ -53,7 +57,8 @@ export default function DLAScenePage({ config }: DLASceneProps) {
         mountRef,
         sceneRef,
         cameraRef,
-        getSetup
+        getSetup,
+        settings,
     })
 
     useAnimationLoop({
@@ -65,12 +70,21 @@ export default function DLAScenePage({ config }: DLASceneProps) {
         focusedRef
     })
 
+    useEffect(()=>{
+        setSettings((prev) => ({
+            ...prev,
+            resetCameraPosition: true,
+        }));
+    })
+
     return (
         <Styled.SceneContainer
         >
-          <Styled.SceneMountRef
-            ref={mountRef}
-          />
+            <Styled.SceneMountRef
+                ref={mountRef}
+            >
+                <SceneSettingsComponent settings={settings} setSettings={setSettings} />
+            </Styled.SceneMountRef>
     
           {loading && (
             <Styled.LoadingSpinner/>

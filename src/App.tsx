@@ -15,6 +15,9 @@ import VDConfigPage from './showcase/VD/VDConfigPage';
 import VDScenePage from './showcase/VD/VDScenePage';
 import Home from './Home';
 import CADetailsPage from './showcase/CA/CADetailsPage';
+import VDDetailsPage from './showcase/VD/VDDetailsPage';
+import PNDetailsPage from './showcase/PN/PNDetailsPage';
+import DLADetailsPage from './showcase/DLA/DLADetailsPage';
 
 
 const pairs : SceneConfigPair[] = [
@@ -31,7 +34,7 @@ const pairs : SceneConfigPair[] = [
     label: "Voronoi Diagrams",
     scene: VDScenePage,
     config: VDConfigPage,
-    details: null,
+    details: VDDetailsPage,
     defaultConfig: VDConfigPresets.default,
   },
   {
@@ -39,7 +42,7 @@ const pairs : SceneConfigPair[] = [
     label: "Perlin Noise",
     scene: PNScenePage,
     config: PNConfigPage,
-    details: null,
+    details: PNDetailsPage,
     defaultConfig: PNConfigPresets.default,
   },
   {
@@ -47,7 +50,7 @@ const pairs : SceneConfigPair[] = [
     label: "Diffusion Limited Aggregation",
     scene: DLAScenePage,
     config: DLAConfigPage,
-    details: null,
+    details: DLADetailsPage,
     defaultConfig: DLAConfigPresets.default,
   },
 ];

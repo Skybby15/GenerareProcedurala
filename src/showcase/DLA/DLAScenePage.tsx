@@ -83,7 +83,9 @@ export default function DLAScenePage({ config, settings, setSettings }: DLAScene
             <Styled.SceneMountRef
                 ref={mountRef}
             >
-                <SceneSettingsComponent settings={settings} setSettings={setSettings} />
+                {!loading &&
+                    <SceneSettingsComponent settings={settings} setSettings={setSettings} />
+                }
             </Styled.SceneMountRef>
     
           {loading && (

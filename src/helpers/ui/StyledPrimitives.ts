@@ -638,7 +638,7 @@ export const Section = styled.div`
 
 export const SectionTitle = styled.div`
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
@@ -668,7 +668,7 @@ export const FieldRow = styled.div`
 
 export const Label = styled.label`
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -962,4 +962,62 @@ export const HintValue = styled.span`
   color: var(--text-bright);
   min-width: 28px;
   text-align: right;
+`;
+
+
+export const AnimatedSection = styled(Section)`
+  padding: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(0, 212, 255, 0.14);
+  border-radius: 14px;
+  transition: transform 0.25s ease, border-color 0.2s ease, background 0.2s ease;
+  animation: ${fadeSlideIn} 0.45s ease both;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 212, 255, 0.28);
+    background: rgba(255, 255, 255, 0.06);
+  }
+`;
+
+export const AnimatedTitle = styled(SectionTitle)`
+  position: relative;
+  padding-right: 20px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+`;
+
+export const StepList = styled.ul`
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+`;
+
+export const StepItem = styled.li`
+  position: relative;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  line-height: 1.75;
+  font-size: 0.95rem;
+
+  &::before {
+    content: "›";
+    position: absolute;
+    left: -1.1rem;
+    color: var(--accent);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 `;

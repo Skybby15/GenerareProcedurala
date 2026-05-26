@@ -2,7 +2,7 @@ import * as THREE from "three";
 import type { ISceneMode } from "./ISceneMode";
 
 export class CaveSceneMode implements ISceneMode<any> {
-    setup(config: any, scene: THREE.Scene, camera: THREE.Camera): void {
+    setup(_config: any, scene: THREE.Scene, camera: THREE.Camera): void {
         console.log("Cave scene mode")
         camera.position.set(0, 0, 0);
 

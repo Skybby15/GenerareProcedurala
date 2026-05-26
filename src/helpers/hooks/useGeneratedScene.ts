@@ -34,6 +34,7 @@ export function useGeneratedScene<TConfig extends BasicConfigValues>({
   settings,
   debounceMs = 150,
 }: UseGeneratedSceneArgs<TConfig>) {
+  const [isFirstRender, setIsFirstRender] = useState(true);
   const [loading, setLoading] = useState(false);
   const debounceRef = useRef<number | null>(null);
   const loadIdRef = useRef(0);
@@ -41,8 +42,14 @@ export function useGeneratedScene<TConfig extends BasicConfigValues>({
 
   useEffect(() => {
     const currentLoadId = ++loadIdRef.current;
+    const firstRenderSettings: SceneSettingsValues = {
+      resetCameraPosition : true,
+    }
 
     const loadScene = async () => {
+      const renderSettins = isFirstRender ? firstRenderSettings : settings
+      setIsFirstRender(false)
+
       setLoading(true);
       await new Promise(requestAnimationFrame);
 
@@ -72,7 +79,7 @@ export function useGeneratedScene<TConfig extends BasicConfigValues>({
         setup.sceneMode,
         setup.pipeline,
         config,
-        settings,
+        renderSettins,
         setup.type
       );
 
@@ -88,7 +95,7 @@ export function useGeneratedScene<TConfig extends BasicConfigValues>({
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [config, getSetup, debounceMs, cameraRef, mountRef, sceneRef]);
+  }, [config, getSetup, debounceMs, cameraRef, mountRef, sceneRef, isFirstRender]);
 
   return { loading };
 }

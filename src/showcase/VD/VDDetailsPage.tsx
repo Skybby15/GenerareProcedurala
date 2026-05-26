@@ -1,7 +1,7 @@
 import type React from "react";
 import * as Styled from "../../helpers/ui/StyledPrimitives";
 
-export default function CADetailsPage(): React.JSX.Element {
+export default function VDDetailsPage(): React.JSX.Element {
   return (
     <Styled.Wrap>
       <Styled.AnimatedSection>

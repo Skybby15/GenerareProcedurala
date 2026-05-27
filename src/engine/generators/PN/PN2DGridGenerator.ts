@@ -1,6 +1,7 @@
 import { createNoise2D } from "simplex-noise"
 import type { IGridGenerator } from "../IGridGenerator"
 import type { PNConfigValues } from "../../../helpers/configs/PNConfig"
+import { NotImplementedError } from "../../../helpers/exceptions/NotImplementedError"
 
 export type PNGridData = {
     heights: number[][]
@@ -55,5 +56,9 @@ export class PN2DGridGenerator implements IGridGenerator<PNGridData, PNConfigVal
         }
 
         return { heights }
+    }
+
+    async generateAsync(): Promise<PNGridData> {
+        throw new NotImplementedError()
     }
 }

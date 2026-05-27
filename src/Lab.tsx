@@ -49,7 +49,6 @@ export default function Lab({ pairs }: LabProps) {
   }, [activePair, activePairId]);
 
   const navigateToHome = () => {
-    console.log("navigate")
     navigation.navigate("/")
   }
 

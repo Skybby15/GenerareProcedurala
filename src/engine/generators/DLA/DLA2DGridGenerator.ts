@@ -1,4 +1,5 @@
 import type { DLAConfigValues } from "../../../helpers/configs/DLAConfig";
+import { NotImplementedError } from "../../../helpers/exceptions/NotImplementedError";
 import type { IGridGenerator } from "../IGridGenerator";
 
 
@@ -37,6 +38,10 @@ export class DLA2DGridGenerator implements IGridGenerator<boolean[][], DLAConfig
         )
 
         return grid
+    }
+
+    async generateAsync(): Promise<boolean[][]> {
+        throw new NotImplementedError()
     }
 
     private runDLA(particles: number, steps: number ,gridSize: number, grid: boolean[][], rng: () => number) { 

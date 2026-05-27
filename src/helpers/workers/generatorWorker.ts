@@ -1,5 +1,5 @@
 import seedrandom from "seedrandom";
-import { CA2DGridGenerator } from "../../engine/generators/CA/CN2DGridGenerator";
+import { CA2DGridGenerator } from "../../engine/generators/CA/CA2DGridGenerator";
 import { DLA2DGridGenerator } from "../../engine/generators/DLA/DLA2DGridGenerator";
 import { PN2DGridGenerator } from "../../engine/generators/PN/PN2DGridGenerator";
 import { VD2DGridGenerator } from "../../engine/generators/VD/VD2DGridGenerator";
@@ -9,10 +9,11 @@ import type { CAConfigValues } from "../configs/CAConfig";
 import type { PNConfigValues } from "../configs/PNConfig";
 import type { VDConfigValues } from "../configs/VDConfig";
 import type { IGridGenerator } from "../../engine/generators/IGridGenerator";
-import { CA3DGridGenerator } from "../../engine/generators/CA/CN3DGridGenerator";
+import { CA3DGridGenerator } from "../../engine/generators/CA/CA3DGridGenerator";
 import { DLA3DGridGenerator } from "../../engine/generators/DLA/DLA3DGridGenerator";
+import { NotImplementedError } from "../exceptions/NotImplementedError";
 
-self.onmessage = (e : MessageEvent<GeneratorWorkerData>) => {
+self.onmessage = async (e : MessageEvent<GeneratorWorkerData>) => {
   const { type, config } = e.data;
 
   let generator : IGridGenerator<any,any>;
@@ -46,7 +47,18 @@ self.onmessage = (e : MessageEvent<GeneratorWorkerData>) => {
 
   if(generator && trueConfig){
         const rng = seedrandom(config.seed)
-        const grid = generator.generate(trueConfig,rng);
+        let grid : any
+
+        try{
+            grid = await generator.generateAsync(trueConfig,rng)
+        }catch(err)
+        {
+            if(err instanceof NotImplementedError)
+                grid = generator.generate(trueConfig,rng)
+            else
+                throw err
+        }
+
         self.postMessage({ grid });
   }else
     self.postMessage({})

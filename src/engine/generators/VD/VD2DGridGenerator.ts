@@ -1,6 +1,7 @@
 import type { IGridGenerator } from "../IGridGenerator"
 import type { VDConfigValues } from "../../../helpers/configs/VDConfig"
 import { getDistanceFunction } from "../../../helpers/others/distances"
+import { NotImplementedError } from "../../../helpers/exceptions/NotImplementedError"
 
 export type Site = {
     x: number,
@@ -76,6 +77,10 @@ export class VD2DGridGenerator implements IGridGenerator<VDGridData, VDConfigVal
             grid,
             sites: relaxedSites,
         }
+    }
+
+    async generateAsync(): Promise<VDGridData> {
+        throw new NotImplementedError()
     }
 
     private generateSites(

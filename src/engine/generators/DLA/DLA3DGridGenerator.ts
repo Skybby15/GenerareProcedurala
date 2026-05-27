@@ -1,4 +1,5 @@
 import type { DLAConfigValues } from "../../../helpers/configs/DLAConfig";
+import { NotImplementedError } from "../../../helpers/exceptions/NotImplementedError";
 import type { IGridGenerator } from "../IGridGenerator";
 
 export class DLA3DGridGenerator
@@ -46,6 +47,10 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
         );
 
         return grid;
+    }
+
+    async generateAsync(): Promise<boolean[][][]> {
+        throw new NotImplementedError()
     }
 
     private runDLA(

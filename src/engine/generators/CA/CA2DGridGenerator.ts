@@ -1,4 +1,5 @@
 import type { CAConfigValues } from "../../../helpers/configs/CAConfig";
+import { NotImplementedError } from "../../../helpers/exceptions/NotImplementedError";
 import type { IGridGenerator } from "../IGridGenerator";
 
 export class CA2DGridGenerator implements IGridGenerator<number[][], CAConfigValues> {
@@ -21,6 +22,10 @@ export class CA2DGridGenerator implements IGridGenerator<number[][], CAConfigVal
         }
 
         return grid;
+    }
+
+    async generateAsync(): Promise<number[][]> {
+        throw new NotImplementedError()
     }
 
     private createInitialGrid(config: CAConfigValues, rng: () => number): number[][] {

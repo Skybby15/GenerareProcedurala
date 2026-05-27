@@ -28,7 +28,6 @@ export class SceneManager<TGridData> {
         type: GeneratorType,
     ) {
         try{
-            this.dispose()
             
             let time = Date.now()
 
@@ -38,14 +37,16 @@ export class SceneManager<TGridData> {
             time = Date.now()
 
             const worldObject = pipeline.run(grid,config)
-    
+            
+            this.dispose()
+
             mode.setup(
                 config,
                 this.scene,
                 this.camera,
                 settings
             )
-    
+            
             this.scene.add(worldObject)
             console.log("Mesh:" + ( Date.now() - time ))
         } catch (err){

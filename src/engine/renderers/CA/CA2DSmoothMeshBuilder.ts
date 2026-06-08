@@ -17,10 +17,6 @@ implements IMeshBuilder<number[][], CAConfigValues>
             gridSize,
         } = config;
 
-        // -------------------------------------------------
-        // Terrain geometry
-        // -------------------------------------------------
-
         const terrainGeo = new THREE.PlaneGeometry(
             gridSize,
             gridSize,

@@ -12,6 +12,8 @@ import { DLACaveMeshBuilder } from "../../engine/renderers/DLA/DLACaveMeshBuilde
 import { useGeneratedScene, type setupFunction } from "../../helpers/hooks/useGeneratedScene";
 import type { SceneSettingsValues } from "../../helpers/types/SceneSettings";
 import SceneSettingsComponent from "../SceneSettingsComponent";
+import { DLA2DBlockMeshBuilder } from "../../engine/renderers/DLA/DLABlockMeshBuilder";
+import { DLAInvertedCaveMeshBuilder } from "../../engine/renderers/DLA/DLAInvertedCaveMeshBuilder";
 
 type DLASceneProps = {
     config: DLAConfigValues;
@@ -41,10 +43,24 @@ export default function DLAScenePage({ config, settings, setSettings }: DLAScene
                 type: "DLA2D"
             };
 
+            case "2DBlock":
+            return {
+                sceneMode: new PlaneSceneMode(),
+                pipeline: new Pipeline(new DLA2DBlockMeshBuilder()),
+                type: "DLA2D"
+            };
+
             case "3DCave":
             return {
                 sceneMode: new CaveSceneMode(),
                 pipeline: new Pipeline(new DLACaveMeshBuilder()),
+                type: "DLA3D"
+            };
+
+            case "3DInvCave":
+            return {
+                sceneMode: new CaveSceneMode(),
+                pipeline: new Pipeline(new DLAInvertedCaveMeshBuilder()),
                 type: "DLA3D"
             };
         }

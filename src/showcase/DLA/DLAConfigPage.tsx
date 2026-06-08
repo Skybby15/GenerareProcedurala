@@ -12,7 +12,9 @@ interface DLAConfigProps {
 
 const ViewModes : DLAViewMode[] = [
     "2DSmooth",
-    "3DCave"
+    "2DBlock",
+    "3DCave",
+    "3DInvCave"
 ] 
 
 export default function DLAConfigPage({ values, onChange }: DLAConfigProps) {
@@ -85,13 +87,13 @@ export default function DLAConfigPage({ values, onChange }: DLAConfigProps) {
             <SliderField
                 label="Stick Radius"
                 value={values.stickRadius}
-                min={1} max={values.gridSize} step={1}
+                min={1} max={10} step={1}
                 onChange={v => set("stickRadius", v)}
             />
             <SliderField
                 label="Stick Proximity"
                 value={values.stickProximity}
-                min={1} max={values.gridSize/2} step={1}
+                min={1} max={10} step={1}
                 onChange={v => set("stickProximity", v)}
             />
 

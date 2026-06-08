@@ -3,7 +3,7 @@ import type { Object3D } from "three";
 import type { IMeshBuilder } from "../IMeshBuilder";
 import type { CAConfigValues } from "../../../helpers/configs/CAConfig";
 
-export class DLACaveMeshBuilder
+export class DLAInvertedCaveMeshBuilder
 implements IMeshBuilder<boolean[][][], CAConfigValues>
 {
     private readonly chunkSize = 16;
@@ -47,7 +47,7 @@ implements IMeshBuilder<boolean[][][], CAConfigValues>
                 nx >= gridSize ||
                 ny >= gridSize ||
                 nz >= gridSize ||
-                grid[nz][ny][nx] === true
+                grid[nz][ny][nx] === false
             );
         };
 
@@ -65,7 +65,7 @@ implements IMeshBuilder<boolean[][][], CAConfigValues>
                     for (let z = cz; z < zEnd; z++) {
                         for (let y = cy; y < yEnd; y++) {
                             for (let x = cx; x < xEnd; x++) {
-                                if (grid[z][y][x] === true) continue;
+                                if (grid[z][y][x] === false) continue;
 
                                 for (const { dir } of directions) {
                                     const [dx, dy, dz] = dir;
@@ -97,7 +97,7 @@ implements IMeshBuilder<boolean[][][], CAConfigValues>
                     for (let z = cz; z < zEnd; z++) {
                         for (let y = cy; y < yEnd; y++) {
                             for (let x = cx; x < xEnd; x++) {
-                                if (grid[z][y][x] === true) continue;
+                                if (grid[z][y][x] === false) continue;
 
                                 for (const { dir, rot } of directions) {
                                     const [dx, dy, dz] = dir;

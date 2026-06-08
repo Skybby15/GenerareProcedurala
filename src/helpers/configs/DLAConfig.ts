@@ -1,6 +1,6 @@
 import type { BasicConfigValues } from "../types/BasicConfig"
 
-export type DLAViewMode = "2DSmooth" | "3DCave"
+export type DLAViewMode = "2DSmooth" | "2DBlock" |"3DCave" | "3DInvCave"
 
 export type DLAConfigValues = BasicConfigValues & {
     mode: DLAViewMode,

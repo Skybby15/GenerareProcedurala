@@ -136,13 +136,13 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
         cx: number,
         cy: number,
         cz: number,
-        proximity: number
+        radius: number
     ) {
-        const r2 = proximity * proximity;
+        const r2 = radius * radius;
 
-        for (let z = -proximity; z <= proximity; z++) {
-            for (let y = -proximity; y <= proximity; y++) {
-                for (let x = -proximity; x <= proximity; x++) {
+        for (let z = -radius; z <= radius; z++) {
+            for (let y = -radius; y <= radius; y++) {
+                for (let x = -radius; x <= radius; x++) {
 
                     if (x === 0 && y === 0 && z === 0)
                         continue;

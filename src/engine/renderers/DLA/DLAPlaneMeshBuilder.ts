@@ -46,7 +46,7 @@ export class DLAPlaneMeshBuilder
 
     const material = new THREE.MeshStandardMaterial({
       color: '#4d8f4f',
-      roughness: 1,
+      roughness: 0.5,
       side: THREE.DoubleSide,
     });
 

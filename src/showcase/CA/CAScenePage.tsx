@@ -13,6 +13,7 @@ import { CA3DCaveMeshBuilder } from "../../engine/renderers/CA/CA3DCaveMeshBuild
 import { useGeneratedScene, type setupFunction } from "../../helpers/hooks/useGeneratedScene";
 import { CaveSceneMode } from "../../engine/scenemodes/CaveSceneMode";
 import SceneSettingsComponent from "../SceneSettingsComponent";
+import SceneTimersOverlay from "../../helpers/ui/SceneTimersOverlay";
 
 type CASceneProps = {
     config: CAConfigValues;
@@ -58,7 +59,8 @@ export default function CAScenePage({ config, settings, setSettings }: CAScenePr
   }, []);
 
   const { 
-      loading 
+      loading,
+      resultTimers
   } = useGeneratedScene({
       config,
       mountRef,
@@ -92,6 +94,12 @@ export default function CAScenePage({ config, settings, setSettings }: CAScenePr
         {!loading &&
           <SceneSettingsComponent settings={settings} setSettings={setSettings} />
         }
+
+        {resultTimers && (
+            <SceneTimersOverlay
+                resultTimers={resultTimers}
+            />
+        )}
       </Styled.SceneMountRef>
 
       {loading && (

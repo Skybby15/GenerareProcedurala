@@ -11,6 +11,7 @@ import { useMarkerPopup } from "../../helpers/hooks/useMarkerPopup";
 import { useGeneratedScene, type setupFunction } from "../../helpers/hooks/useGeneratedScene";
 import type { SceneSettingsValues } from "../../helpers/types/SceneSettings";
 import SceneSettingsComponent from "../SceneSettingsComponent";
+import SceneTimersOverlay from "../../helpers/ui/SceneTimersOverlay";
 
 type VD2DSceneProps = {
     config: VDConfigValues;
@@ -54,7 +55,8 @@ export default function VDScenePage({ config, settings, setSettings }: VD2DScene
     },[setSettings])
 
     const { 
-        loading 
+        loading,
+        resultTimers
     } = useGeneratedScene({
         config,
         mountRef,
@@ -108,6 +110,12 @@ export default function VDScenePage({ config, settings, setSettings }: VD2DScene
                     <div>Y: {popup.y.toFixed(2)}</div>
                     <div>Weight: {popup.weight.toFixed(2)}</div>
                 </div>
+            )}
+
+            {resultTimers && (
+                <SceneTimersOverlay
+                    resultTimers={resultTimers}
+                />
             )}
         </Styled.SceneMountRef>
 

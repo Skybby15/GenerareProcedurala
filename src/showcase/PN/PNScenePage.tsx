@@ -10,6 +10,7 @@ import { useGeneratedScene, type setupFunction } from "../../helpers/hooks/useGe
 import type { SceneSettingsValues } from "../../helpers/types/SceneSettings";
 import SceneSettingsComponent from "../SceneSettingsComponent";
 import { PNPlaneSceneMode } from "../../engine/scenemodes/PNPlaneSceneMode";
+import SceneTimersOverlay from "../../helpers/ui/SceneTimersOverlay";
 
 type PNSceneProps = {
     config: PNConfigValues;
@@ -39,7 +40,8 @@ export default function PNScenePage({ config, settings, setSettings }: PNScenePr
     }, []);
 
     const { 
-        loading 
+        loading,
+        resultTimers
     } = useGeneratedScene({
         config,
         mountRef,
@@ -73,6 +75,12 @@ export default function PNScenePage({ config, settings, setSettings }: PNScenePr
             {!loading &&
                 <SceneSettingsComponent settings={settings} setSettings={setSettings} />
             }
+
+            {resultTimers && (
+                <SceneTimersOverlay
+                    resultTimers={resultTimers}
+                />
+            )}
         </Styled.SceneMountRef>
 
         {loading && (

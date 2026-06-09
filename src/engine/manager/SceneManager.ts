@@ -28,15 +28,23 @@ export class SceneManager<TGridData> {
         type: GeneratorType,
     ) {
         try{
+            let gridTime: number
+            let meshTime: number
+            let setupTime: number
             
-            let time = Date.now()
+            gridTime = Date.now()
 
             const grid = await this.generateGridAsync(type,config)
 
-            console.log("Grid:" + ( Date.now() - time ))
-            time = Date.now()
+            gridTime = Date.now() - gridTime
+
+            meshTime = Date.now()
 
             const worldObject = pipeline.run(grid,config)
+
+            meshTime = Date.now() - meshTime
+
+            setupTime = Date.now()
             
             this.dispose()
 
@@ -48,7 +56,14 @@ export class SceneManager<TGridData> {
             )
             
             this.scene.add(worldObject)
-            console.log("Mesh:" + ( Date.now() - time ))
+
+            setupTime = Date.now() - setupTime
+
+            return {
+                gridTime,
+                meshTime,
+                setupTime
+            }
         } catch (err){
             if(err instanceof CancelledGenerationError)
                 return

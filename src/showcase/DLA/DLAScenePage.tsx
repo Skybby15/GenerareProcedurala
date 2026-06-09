@@ -14,6 +14,7 @@ import type { SceneSettingsValues } from "../../helpers/types/SceneSettings";
 import SceneSettingsComponent from "../SceneSettingsComponent";
 import { DLA2DBlockMeshBuilder } from "../../engine/renderers/DLA/DLABlockMeshBuilder";
 import { DLAInvertedCaveMeshBuilder } from "../../engine/renderers/DLA/DLAInvertedCaveMeshBuilder";
+import SceneTimersOverlay from "../../helpers/ui/SceneTimersOverlay";
 
 type DLASceneProps = {
     config: DLAConfigValues;
@@ -67,7 +68,8 @@ export default function DLAScenePage({ config, settings, setSettings }: DLAScene
         }, []);
 
     const { 
-        loading 
+        loading,
+        resultTimers
     } = useGeneratedScene({
         config,
         mountRef,
@@ -102,6 +104,13 @@ export default function DLAScenePage({ config, settings, setSettings }: DLAScene
                 {!loading &&
                     <SceneSettingsComponent settings={settings} setSettings={setSettings} />
                 }
+
+                {resultTimers && (
+                    <SceneTimersOverlay
+                        resultTimers={resultTimers}
+                    />
+                )}
+
             </Styled.SceneMountRef>
     
           {loading && (

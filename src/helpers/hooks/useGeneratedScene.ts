@@ -40,6 +40,12 @@ export function useGeneratedScene<TConfig extends BasicConfigValues>({
   const loadIdRef = useRef(0);
   const managerRef = useRef<SceneManager<any> | null>(null);
 
+  const [resultTimers, setResultTimers] = useState<{
+    gridTime: number;
+    meshTime: number;
+    setupTime: number;
+  } | null>(null)
+
   useEffect(() => {
     const currentLoadId = ++loadIdRef.current;
     const firstRenderSettings: SceneSettingsValues = {
@@ -81,7 +87,9 @@ export function useGeneratedScene<TConfig extends BasicConfigValues>({
         config,
         renderSettins,
         setup.type
-      );
+      ).then((timers) => {
+        setResultTimers(timers!)
+      })
 
       if (currentLoadId === loadIdRef.current) {
         setLoading(false);
@@ -97,5 +105,5 @@ export function useGeneratedScene<TConfig extends BasicConfigValues>({
     };
   }, [config, getSetup, debounceMs, cameraRef, mountRef, sceneRef, isFirstRender]);
 
-  return { loading };
+  return { loading, resultTimers };
 }

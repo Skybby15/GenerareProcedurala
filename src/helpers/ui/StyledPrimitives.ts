@@ -503,6 +503,52 @@ export const SceneMountRef = styled.div`
   outline: none;
 `;
 
+export const SceneTimerOverlay = styled.div`
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 30;
+  min-width: 170px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(8, 14, 24, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.4;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
+
+  > .label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  > .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  > .row:last-child {
+    margin-bottom: 0;
+  }
+
+  > .name {
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  > .value {
+    font-weight: 600;
+    color: #ffffff;
+  }
+`;
+
 export const SceneSettingsButton = styled.button<{ $active: boolean }>`
   position: absolute;
   top: 12px;

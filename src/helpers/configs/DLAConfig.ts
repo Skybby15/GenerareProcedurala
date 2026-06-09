@@ -1,6 +1,6 @@
 import type { BasicConfigValues } from "../types/BasicConfig"
 
-export type DLAViewMode = "2DSmooth" | "2DBlock" |"3DCave" | "3DInvCave"
+export type DLAViewMode = "2DBlock" |"3DCave" | "3DInvCave"
 
 export type DLAConfigValues = BasicConfigValues & {
     mode: DLAViewMode,
@@ -11,7 +11,7 @@ export type DLAConfigValues = BasicConfigValues & {
     stickRadius: number
     stickProximity: number
 
-    spawnBehaviour: "edge" | "emptySpot" | "anywhere" //not implemented
+    particleSpawnBehaviour: "edge" | "empty"
 
 }
 
@@ -20,7 +20,7 @@ export class DLAConfigPresets {
         seed: '0',
         gridSize: 100,
 
-        mode: "2DSmooth",
+        mode: "2DBlock",
         
         particles: 3000,
         steps: 3000,
@@ -28,7 +28,7 @@ export class DLAConfigPresets {
         stickRadius: 1,
         stickProximity: 1,
 
-        spawnBehaviour: "edge" //not implemented
+        particleSpawnBehaviour: "empty"
 
     }
 }

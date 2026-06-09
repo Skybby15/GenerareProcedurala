@@ -3,13 +3,13 @@ import { useCallback, useEffect, useRef, type Dispatch, type SetStateAction } fr
 import { useThreeScene } from "../../helpers/hooks/useThreeScene";
 import { useCameraControls } from "../../helpers/hooks/useCameraControls";
 import { useAnimationLoop } from "../../helpers/hooks/useAnimationLoop";
-import { PlaneSceneMode } from "../../engine/scenemodes/PlaneSceneMode";
 import { Pipeline } from "../../engine/pipeline/Pipeline";
 import type { PNConfigValues } from "../../helpers/configs/PNConfig";
 import { PNPlaneMeshBuilder } from "../../engine/renderers/PN/PNPlaneMeshBuilder";
 import { useGeneratedScene, type setupFunction } from "../../helpers/hooks/useGeneratedScene";
 import type { SceneSettingsValues } from "../../helpers/types/SceneSettings";
 import SceneSettingsComponent from "../SceneSettingsComponent";
+import { PNPlaneSceneMode } from "../../engine/scenemodes/PNPlaneSceneMode";
 
 type PNSceneProps = {
     config: PNConfigValues;
@@ -32,7 +32,7 @@ export default function PNScenePage({ config, settings, setSettings }: PNScenePr
 
     const getSetup : setupFunction<PNConfigValues> = useCallback(() => {
         return {
-            sceneMode: new PlaneSceneMode(),
+            sceneMode: new PNPlaneSceneMode(),
             pipeline: new Pipeline(new PNPlaneMeshBuilder()),
             type: "PN2D"
         };

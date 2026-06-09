@@ -14,7 +14,7 @@ export type PNConfigValues = BasicConfigValues & {
 export class PNConfigPresets {
     static default: PNConfigValues = {
         seed: '0',
-        gridSize: 100,
+        gridSize: 256,
 
         scale: 40,
         amplitude: 12,

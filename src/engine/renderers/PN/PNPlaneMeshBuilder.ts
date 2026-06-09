@@ -4,6 +4,10 @@ import type { IMeshBuilder } from "../IMeshBuilder";
 import type { PNGridData } from '../../generators/PN/PN2DGridGenerator';
 import type { PNConfigValues } from '../../../helpers/configs/PNConfig';
 
+const snowColor = new THREE.Color("#ffffff");
+const grassColor = new THREE.Color("#4d8f4f");
+const hillColor = new THREE.Color("#625032");
+
 
 export class PNPlaneMeshBuilder implements IMeshBuilder<PNGridData,PNConfigValues> {
     build(gridData: PNGridData, config: PNConfigValues): Object3D {
@@ -19,6 +23,7 @@ export class PNPlaneMeshBuilder implements IMeshBuilder<PNGridData,PNConfigValue
         terrainGeo.rotateX(-Math.PI / 2)
     
         const pos = terrainGeo.attributes.position
+        const colors: number[] = []
         
         for (let i = 0; i < pos.count; i++) {
             const x = i % gridSize
@@ -27,12 +32,36 @@ export class PNPlaneMeshBuilder implements IMeshBuilder<PNGridData,PNConfigValue
             const height = heights[y][x]    
     
             pos.setY(i, height)
+
+            if (height > config.amplitude * 0.4) {
+                colors.push(
+                    snowColor.r,
+                    snowColor.g,
+                    snowColor.b
+                )
+            } else if (height > - config.amplitude * 0.1 ) {
+                colors.push(
+                    hillColor.r,
+                    hillColor.g,
+                    hillColor.b
+                )
+            } else {
+                colors.push(
+                    grassColor.r,
+                    grassColor.g,
+                    grassColor.b
+                )
+            }
         }
+
+        terrainGeo.setAttribute(
+            "color",
+            new THREE.Float32BufferAttribute(colors, 3)
+        )
 
         terrainGeo.computeVertexNormals()
         const terrainMat = new THREE.MeshStandardMaterial({
-            color: '#4d8f4f',
-            wireframe: false,
+            vertexColors: true,
             flatShading: true,
         })
         const terrain = new THREE.Mesh(terrainGeo, terrainMat)

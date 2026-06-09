@@ -7,11 +7,11 @@ export default function PNDetailsPage(): React.JSX.Element {
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Overview</Styled.AnimatedTitle>
         <Styled.Hint>
-          Cellular Automata are grid-based simulations where each cell updates
-          based on local neighbor rules. Repeating simple rules can create
-          caves, textures, and organic patterns. The interactive scene above uses
-          a grid in which every cell only has one of two states: "empty" or
-          "full". Full cells appear as green (plane) or brownish (cave) spots.
+          Perlin noise is a gradient-based procedural noise technique used to
+          generate smooth, natural-looking textures and heightfields. It
+          produces band-limited, continuous values that blend smoothly across
+          space, useful for terrain, clouds, and organic patterns. The scene
+          above visualizes Perlin noise mapped to color or displacement.
         </Styled.Hint>
       </Styled.AnimatedSection>
 
@@ -19,10 +19,10 @@ export default function PNDetailsPage(): React.JSX.Element {
         <Styled.AnimatedTitle>How It Works</Styled.AnimatedTitle>
         <Styled.Hint>
           <Styled.StepList>
-            <Styled.StepItem>Initialize a 2D or 3D grid with filled/empty cells.</Styled.StepItem>
-            <Styled.StepItem>Count neighbors around each cell.</Styled.StepItem>
-            <Styled.StepItem>Apply survival/birth rules based on thresholds.</Styled.StepItem>
-            <Styled.StepItem>Repeat for multiple iterations to let patterns emerge.</Styled.StepItem>
+            <Styled.StepItem>Define a lattice of gradient vectors at integer grid points.</Styled.StepItem>
+            <Styled.StepItem>For a sample point, compute dot products with corner gradients.</Styled.StepItem>
+            <Styled.StepItem>Interpolate those dot values using a smooth easing curve.</Styled.StepItem>
+            <Styled.StepItem>Combine multiple octaves (frequencies) for fractal noise.</Styled.StepItem>
           </Styled.StepList>
         </Styled.Hint>
       </Styled.AnimatedSection>
@@ -31,11 +31,11 @@ export default function PNDetailsPage(): React.JSX.Element {
         <Styled.AnimatedTitle>Parameters</Styled.AnimatedTitle>
         <Styled.Hint>
           <Styled.StepList>
-            <Styled.StepItem><strong>Grid size</strong>: width, height, and depth of the representation.</Styled.StepItem>
-            <Styled.StepItem><strong>Initial density</strong>: chance each cell begins filled.</Styled.StepItem>
-            <Styled.StepItem><strong>Steps</strong>: number of simulation iterations.</Styled.StepItem>
-            <Styled.StepItem><strong>Min / max neighbors</strong>: survival and birth conditions.</Styled.StepItem>
-            <Styled.StepItem><strong>Edge behavior</strong>: whether the border counts as empty or full.</Styled.StepItem>
+            <Styled.StepItem><strong>Scale</strong>: base frequency that controls feature size.</Styled.StepItem>
+            <Styled.StepItem><strong>Octaves</strong>: number of layered frequencies to combine.</Styled.StepItem>
+            <Styled.StepItem><strong>Persistence</strong>: amplitude falloff between octaves.</Styled.StepItem>
+            <Styled.StepItem><strong>Lacunarity</strong>: frequency multiplier between octaves.</Styled.StepItem>
+            <Styled.StepItem><strong>Seed</strong>: random seed for gradient generation.</Styled.StepItem>
           </Styled.StepList>
         </Styled.Hint>
       </Styled.AnimatedSection>
@@ -44,10 +44,10 @@ export default function PNDetailsPage(): React.JSX.Element {
         <Styled.AnimatedTitle>Use Cases</Styled.AnimatedTitle>
         <Styled.Hint>
           <Styled.StepList>
-            <Styled.StepItem>Procedural cave generation.</Styled.StepItem>
-            <Styled.StepItem>Organic terrain masks.</Styled.StepItem>
-            <Styled.StepItem>Texture and pattern synthesis.</Styled.StepItem>
-            <Styled.StepItem>Emergent behavior demonstrations.</Styled.StepItem>
+            <Styled.StepItem>Heightmap and terrain generation.</Styled.StepItem>
+            <Styled.StepItem>Clouds, smoke, and volumetric textures.</Styled.StepItem>
+            <Styled.StepItem>Procedural textures for materials and detail maps.</Styled.StepItem>
+            <Styled.StepItem>Animated noise for natural motion and variation.</Styled.StepItem>
           </Styled.StepList>
         </Styled.Hint>
       </Styled.AnimatedSection>
@@ -55,19 +55,20 @@ export default function PNDetailsPage(): React.JSX.Element {
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Performance Notes</Styled.AnimatedTitle>
         <Styled.Hint>
-          Complexity scales with grid size and iteration count. For 3D grids,
-          keep iteration counts moderate and use chunked updates
-          for smoother interaction.
+          Noise evaluation is cheap per sample but becomes costly for large
+          dense fields or many octaves. Prefer GPU shaders for realtime noise
+          and sample caching for repeated queries. Reduce octaves or resolution
+          when profiling hotspots.
         </Styled.Hint>
       </Styled.AnimatedSection>
 
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Possible Modifications</Styled.AnimatedTitle>
         <Styled.Hint>
-          Although this model uses only two states, it can be extended to
-          multiple cell types like water, grass, stone, or dirt. More states
-          increase rule complexity because cells may need to change type based
-          on neighboring cell types rather than just binary alive/dead transitions.
+          Use Simplex noise for fewer artifacts and better performance in
+          higher dimensions, apply domain warping for richer structures, or
+          blend multiple noise types. Map outputs to palettes, terraces, or
+          slope-based masks for stylized terrains.
         </Styled.Hint>
       </Styled.AnimatedSection>
     </Styled.Wrap>

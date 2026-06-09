@@ -7,11 +7,11 @@ export default function DLADetailsPage(): React.JSX.Element {
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Overview</Styled.AnimatedTitle>
         <Styled.Hint>
-          Cellular Automata are grid-based simulations where each cell updates
-          based on local neighbor rules. Repeating simple rules can create
-          caves, textures, and organic patterns. The interactive scene above uses
-          a grid in which every cell only has one of two states: "empty" or
-          "full". Full cells appear as green (plane) or brownish (cave) spots.
+          Diffusion-Limited Aggregation (DLA) models cluster formation by
+          particles performing random walks until they stick to an existing
+          aggregate. The result is tree-like, fractal structures resembling
+          mineral deposits, lightning paths, or coral. The interactive scene
+          visualizes particles walking and joining the growing aggregate.
         </Styled.Hint>
       </Styled.AnimatedSection>
 
@@ -19,10 +19,10 @@ export default function DLADetailsPage(): React.JSX.Element {
         <Styled.AnimatedTitle>How It Works</Styled.AnimatedTitle>
         <Styled.Hint>
           <Styled.StepList>
-            <Styled.StepItem>Initialize a 2D or 3D grid with filled/empty cells.</Styled.StepItem>
-            <Styled.StepItem>Count neighbors around each cell.</Styled.StepItem>
-            <Styled.StepItem>Apply survival/birth rules based on thresholds.</Styled.StepItem>
-            <Styled.StepItem>Repeat for multiple iterations to let patterns emerge.</Styled.StepItem>
+            <Styled.StepItem>Seed an initial aggregate (single particle or shape).</Styled.StepItem>
+            <Styled.StepItem>Spawn walker particles at the boundary or from infinity.</Styled.StepItem>
+            <Styled.StepItem>Each walker performs a random walk until it contacts the aggregate.</Styled.StepItem>
+            <Styled.StepItem>On contact, the walker sticks and becomes part of the aggregate; repeat.</Styled.StepItem>
           </Styled.StepList>
         </Styled.Hint>
       </Styled.AnimatedSection>
@@ -31,11 +31,11 @@ export default function DLADetailsPage(): React.JSX.Element {
         <Styled.AnimatedTitle>Parameters</Styled.AnimatedTitle>
         <Styled.Hint>
           <Styled.StepList>
-            <Styled.StepItem><strong>Grid size</strong>: width, height, and depth of the representation.</Styled.StepItem>
-            <Styled.StepItem><strong>Initial density</strong>: chance each cell begins filled.</Styled.StepItem>
-            <Styled.StepItem><strong>Steps</strong>: number of simulation iterations.</Styled.StepItem>
-            <Styled.StepItem><strong>Min / max neighbors</strong>: survival and birth conditions.</Styled.StepItem>
-            <Styled.StepItem><strong>Edge behavior</strong>: whether the border counts as empty or full.</Styled.StepItem>
+            <Styled.StepItem><strong>Spawn radius</strong>: where walkers are introduced relative to the aggregate.</Styled.StepItem>
+            <Styled.StepItem><strong>Walk rules</strong>: step types (4/8-neighbor, continuous random walk) and bias.</Styled.StepItem>
+            <Styled.StepItem><strong>Stick condition</strong>: contact distance or probability of adhesion.</Styled.StepItem>
+            <Styled.StepItem><strong>Particle count</strong>: total walkers to aggregate or target size.</Styled.StepItem>
+            <Styled.StepItem><strong>Bounds</strong>: clipping, kill-radius, or periodic edges to manage walkers.</Styled.StepItem>
           </Styled.StepList>
         </Styled.Hint>
       </Styled.AnimatedSection>
@@ -44,10 +44,10 @@ export default function DLADetailsPage(): React.JSX.Element {
         <Styled.AnimatedTitle>Use Cases</Styled.AnimatedTitle>
         <Styled.Hint>
           <Styled.StepList>
-            <Styled.StepItem>Procedural cave generation.</Styled.StepItem>
-            <Styled.StepItem>Organic terrain masks.</Styled.StepItem>
-            <Styled.StepItem>Texture and pattern synthesis.</Styled.StepItem>
-            <Styled.StepItem>Emergent behavior demonstrations.</Styled.StepItem>
+            <Styled.StepItem>Modeling lightning, mineral deposits, and dendritic patterns.</Styled.StepItem>
+            <Styled.StepItem>Procedural growth for plants, corals, or root systems.</Styled.StepItem>
+            <Styled.StepItem>Artistic and generative visuals with fractal aesthetics.</Styled.StepItem>
+            <Styled.StepItem>Studying diffusion-limited processes and scaling laws.</Styled.StepItem>
           </Styled.StepList>
         </Styled.Hint>
       </Styled.AnimatedSection>
@@ -55,19 +55,20 @@ export default function DLADetailsPage(): React.JSX.Element {
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Performance Notes</Styled.AnimatedTitle>
         <Styled.Hint>
-          Complexity scales with grid size and iteration count. For 3D grids,
-          keep iteration counts moderate and use chunked updates
-          for smoother interaction.
+          Naive DLA can be expensive because many walkers wander far before
+          sticking. Use acceleration: kill-radius, launch-radius adaptation,
+          spatial hashing, or biased walks. Parallelizing independent walkers
+          or using GPU compute speeds up large aggregates.
         </Styled.Hint>
       </Styled.AnimatedSection>
 
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Possible Modifications</Styled.AnimatedTitle>
         <Styled.Hint>
-          Although this model uses only two states, it can be extended to
-          multiple cell types like water, grass, stone, or dirt. More states
-          increase rule complexity because cells may need to change type based
-          on neighboring cell types rather than just binary alive/dead transitions.
+          Variations include adding attraction/repulsion fields, particle
+          size and branching rules, anisotropic diffusion, or multi-species
+          walkers with different sticking behaviors. Convert to continuous
+         -space DLA or couple with flow fields for richer structures.
         </Styled.Hint>
       </Styled.AnimatedSection>
     </Styled.Wrap>

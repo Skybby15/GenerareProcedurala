@@ -16,6 +16,7 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
             steps,
             stickRadius,
             stickProximity,
+            particleSpawnBehaviour
         } = config;
 
         const grid: boolean[][][] = [];
@@ -43,6 +44,7 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
             grid,
             stickRadius,
             stickProximity,
+            particleSpawnBehaviour,
             rng
         );
 
@@ -60,10 +62,11 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
         grid: boolean[][][],
         stickRadius: number,
         stickProximity: number,
+        particleSpawnBehaviour: "edge" | "empty",
         rng: () => number
     ) {
         for (let p = 0; p < particles; p++) {
-            let { x, y, z } = this.spawnOnSurface(gridSize, rng);
+            let { x, y, z } = this.spawnParticle(grid, gridSize, particleSpawnBehaviour, rng);
 
             x = Math.floor(x);
             y = Math.floor(y);
@@ -106,7 +109,20 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
         }
     }
 
-    private spawnOnSurface(
+    private spawnParticle(
+        grid: boolean[][][],
+        gridSize: number,
+        spawnMode: "edge" | "empty",
+        rng: () => number
+    ) {
+        if (spawnMode === "edge") {
+            return this.spawnOnEdge(gridSize, rng);
+        }
+
+        return this.spawnOnRandomEmptyCell(grid, gridSize, rng);
+    }
+
+    private spawnOnEdge(
         gridSize: number,
         rng: () => number
     ) {
@@ -128,6 +144,26 @@ implements IGridGenerator<boolean[][][], DLAConfigValues>
             return { x: rng() * gridSize, y: rng() * gridSize, z: 0 };
 
         return { x: rng() * gridSize, y: rng() * gridSize, z: gridSize - 1 };
+    }
+
+    private spawnOnRandomEmptyCell(
+        grid: boolean[][][],
+        gridSize: number,
+        rng: () => number
+    ) {
+        const maxAttempts = gridSize * gridSize * gridSize;
+
+        for (let i = 0; i < maxAttempts; i++) {
+            const x = Math.floor(rng() * gridSize);
+            const y = Math.floor(rng() * gridSize);
+            const z = Math.floor(rng() * gridSize);
+
+            if (!grid[z][y][x]) {
+                return { x, y, z };
+            }
+        }
+
+        return this.spawnOnEdge(gridSize, rng);
     }
 
     private touchesCluster(

@@ -11,11 +11,15 @@ interface DLAConfigProps {
 }
 
 const ViewModes : DLAViewMode[] = [
-    "2DSmooth",
     "2DBlock",
     "3DCave",
     "3DInvCave"
 ] 
+
+const ParticleSpawnModes : ("edge" | "empty")[] = [
+    "edge",
+    "empty"
+]
 
 export default function DLAConfigPage({ values, onChange }: DLAConfigProps) {
     const set = <K extends keyof DLAConfigValues>(key: K, val: DLAConfigValues[K]) =>
@@ -29,20 +33,20 @@ export default function DLAConfigPage({ values, onChange }: DLAConfigProps) {
         <Styled.Wrap>
 
             {/* ── Mode ── */}
-                  <Styled.Section>
-                    <Styled.SectionTitle>Mode</Styled.SectionTitle>
-                    <Styled.SegmentRow>
-                      { ViewModes.map(opt => (
-                        <Styled.Seg
-                          key={opt}
-                          $active={values.mode === opt}
-                          onClick={() => set("mode", opt)}
-                        >
-                          {opt}
-                        </Styled.Seg>
-                      ))}
-                    </Styled.SegmentRow>
-                  </Styled.Section>
+            <Styled.Section>
+            <Styled.SectionTitle>Mode</Styled.SectionTitle>
+            <Styled.SegmentRow>
+                { ViewModes.map(opt => (
+                <Styled.Seg
+                    key={opt}
+                    $active={values.mode === opt}
+                    onClick={() => set("mode", opt)}
+                >
+                    {opt}
+                </Styled.Seg>
+                ))}
+            </Styled.SegmentRow>
+            </Styled.Section>
 
             {/* ── Seed ── */}
             <Styled.Section>
@@ -96,6 +100,21 @@ export default function DLAConfigPage({ values, onChange }: DLAConfigProps) {
                 min={1} max={10} step={1}
                 onChange={v => set("stickProximity", v)}
             />
+
+            <Styled.Section>
+            <Styled.SectionTitle>Particle Spawn</Styled.SectionTitle>
+            <Styled.SegmentRow>
+                { ParticleSpawnModes.map(opt => (
+                <Styled.Seg
+                    key={opt}
+                    $active={values.particleSpawnBehaviour === opt}
+                    onClick={() => set("particleSpawnBehaviour", opt)}
+                >
+                    {opt}
+                </Styled.Seg>
+                ))}
+            </Styled.SegmentRow>
+            </Styled.Section>
 
             <ComplexityPreview
                 particles={values.particles}

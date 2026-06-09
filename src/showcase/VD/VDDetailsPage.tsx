@@ -7,11 +7,11 @@ export default function VDDetailsPage(): React.JSX.Element {
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Overview</Styled.AnimatedTitle>
         <Styled.Hint>
-          Cellular Automata are grid-based simulations where each cell updates
-          based on local neighbor rules. Repeating simple rules can create
-          caves, textures, and organic patterns. The interactive scene above uses
-          a grid in which every cell only has one of two states: "empty" or
-          "full". Full cells appear as green (plane) or brownish (cave) spots.
+          Voronoi diagrams partition space into regions around a set of seed
+          points (sites). Each region contains all locations closer to its site
+          than to any other. They are useful for natural-looking cells,
+          territory maps, and tiling patterns. The interactive scene above
+          visualizes sites and their corresponding Voronoi cells.
         </Styled.Hint>
       </Styled.AnimatedSection>
 
@@ -19,10 +19,11 @@ export default function VDDetailsPage(): React.JSX.Element {
         <Styled.AnimatedTitle>How It Works</Styled.AnimatedTitle>
         <Styled.Hint>
           <Styled.StepList>
-            <Styled.StepItem>Initialize a 2D or 3D grid with filled/empty cells.</Styled.StepItem>
-            <Styled.StepItem>Count neighbors around each cell.</Styled.StepItem>
-            <Styled.StepItem>Apply survival/birth rules based on thresholds.</Styled.StepItem>
-            <Styled.StepItem>Repeat for multiple iterations to let patterns emerge.</Styled.StepItem>
+            <Styled.StepItem>Place a set of sites (random, grid, or user-defined).</Styled.StepItem>
+            <Styled.StepItem>Compute the Voronoi cell for each site by nearest-distance.</Styled.StepItem>
+            <Styled.StepItem>Optionally relax sites (Lloyd's algorithm) to produce
+              more even regions.</Styled.StepItem>
+            <Styled.StepItem>Clip or project cells to the scene bounds and render polygons.</Styled.StepItem>
           </Styled.StepList>
         </Styled.Hint>
       </Styled.AnimatedSection>
@@ -31,11 +32,11 @@ export default function VDDetailsPage(): React.JSX.Element {
         <Styled.AnimatedTitle>Parameters</Styled.AnimatedTitle>
         <Styled.Hint>
           <Styled.StepList>
-            <Styled.StepItem><strong>Grid size</strong>: width, height, and depth of the representation.</Styled.StepItem>
-            <Styled.StepItem><strong>Initial density</strong>: chance each cell begins filled.</Styled.StepItem>
-            <Styled.StepItem><strong>Steps</strong>: number of simulation iterations.</Styled.StepItem>
-            <Styled.StepItem><strong>Min / max neighbors</strong>: survival and birth conditions.</Styled.StepItem>
-            <Styled.StepItem><strong>Edge behavior</strong>: whether the border counts as empty or full.</Styled.StepItem>
+            <Styled.StepItem><strong>Site count</strong>: number of seed points creating regions.</Styled.StepItem>
+            <Styled.StepItem><strong>Seed distribution</strong>: random, Poisson, grid, or custom placement.</Styled.StepItem>
+            <Styled.StepItem><strong>Distance metric</strong>: Euclidean, Manhattan, or custom metric.</Styled.StepItem>
+            <Styled.StepItem><strong>Relaxation</strong>: iterations of Lloyd's algorithm for centroidal Voronoi.</Styled.StepItem>
+            <Styled.StepItem><strong>Bounding</strong>: clipping to scene bounds or applying wrap/periodic edges.</Styled.StepItem>
           </Styled.StepList>
         </Styled.Hint>
       </Styled.AnimatedSection>
@@ -44,10 +45,10 @@ export default function VDDetailsPage(): React.JSX.Element {
         <Styled.AnimatedTitle>Use Cases</Styled.AnimatedTitle>
         <Styled.Hint>
           <Styled.StepList>
-            <Styled.StepItem>Procedural cave generation.</Styled.StepItem>
-            <Styled.StepItem>Organic terrain masks.</Styled.StepItem>
-            <Styled.StepItem>Texture and pattern synthesis.</Styled.StepItem>
-            <Styled.StepItem>Emergent behavior demonstrations.</Styled.StepItem>
+            <Styled.StepItem>Procedural territory and biome partitioning.</Styled.StepItem>
+            <Styled.StepItem>Mesh cell decomposition and tiling for rendering.</Styled.StepItem>
+            <Styled.StepItem>Voronoi-based textures, art, and pattern generation.</Styled.StepItem>
+            <Styled.StepItem>Simulating growth, influence zones, and nearest-neighbor maps.</Styled.StepItem>
           </Styled.StepList>
         </Styled.Hint>
       </Styled.AnimatedSection>
@@ -55,19 +56,20 @@ export default function VDDetailsPage(): React.JSX.Element {
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Performance Notes</Styled.AnimatedTitle>
         <Styled.Hint>
-          Complexity scales with grid size and iteration count. For 3D grids,
-          keep iteration counts moderate and use chunked updates
-          for smoother interaction.
+          Exact Voronoi computation (e.g., Fortune's algorithm) is typically
+          O(n log n). Rasterized or grid-approximate approaches trade accuracy
+          for speed and scale well for many sites. Use spatial indexing or
+          tiling for large site counts and limit relaxation iterations.
         </Styled.Hint>
       </Styled.AnimatedSection>
 
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Possible Modifications</Styled.AnimatedTitle>
         <Styled.Hint>
-          Although this model uses only two states, it can be extended to
-          multiple cell types like water, grass, stone, or dirt. More states
-          increase rule complexity because cells may need to change type based
-          on neighboring cell types rather than just binary alive/dead transitions.
+          Extend to power diagrams (weighted Voronoi), apply anisotropic
+          distance metrics, compute 3D Voronoi, or integrate site attributes
+          (colors, weights). Use centroidal relaxation for more uniform cells
+          or constrain sites to features like coastlines or existing geometry.
         </Styled.Hint>
       </Styled.AnimatedSection>
     </Styled.Wrap>

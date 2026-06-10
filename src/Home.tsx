@@ -1,37 +1,15 @@
-
-
 import * as Styled from "./helpers/ui/StyledPrimitives";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { CAConfigPresets } from "./helpers/configs/CAConfig";
 import CustomScenePage from "./showcase/CustomScenePage";
 
-const sectionItems = [
-  {
-    name: "Cellular Automata",
-    description:
-      "Rule-based grid evolution that produces cavernous and organic noise patterns using neighbor interactions.",
-  },
-  {
-    name: "Voronoi Diagrams",
-    description:
-      "Space partitioning around seeds creates natural territory cells and soft region boundaries for structure generation.",
-  },
-  {
-    name: "Perlin Noise",
-    description:
-      "Smooth gradient noise for terrain, texture and procedural variation with layered control.",
-  },
-  {
-    name: "Diffusion Limited Aggregation",
-    description:
-      "Particle aggregation from a seed forms branching, fractal structures that mimic natural growth.",
-  },
-];
 
 export default function Home() {
+  const navigate = useNavigate();
 
   const navigateToLab = () => {
-    navigation.navigate("/lab")
+    navigate("/lab");
   }
 
   const homeContainerRef = useRef<HTMLDivElement | null>(null);
@@ -91,20 +69,10 @@ export default function Home() {
                 </Styled.HeroDescription>
               </Styled.HeroContent>
             </Styled.HeroSplit>
+            <Styled.HeroActionButton onClick={navigateToLab}>
+              Explore the Lab
+            </Styled.HeroActionButton>
           </Styled.HeroPanel>
-
-          <Styled.DetailsPanel>
-            <Styled.PanelLabel>
-              <span className="tag">ALGORITHMS //</span>
-              <span className="title">Project techniques</span>
-            </Styled.PanelLabel>
-            {sectionItems.map(item => (
-              <Styled.FeatureCard key={item.name}>
-                <Styled.FeatureHeading>{item.name}</Styled.FeatureHeading>
-                <Styled.FeatureText>{item.description}</Styled.FeatureText>
-              </Styled.FeatureCard>
-            ))}
-          </Styled.DetailsPanel>
         </Styled.HomeContainer>
       </Styled.Shell>
     </>

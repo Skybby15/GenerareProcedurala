@@ -136,6 +136,7 @@ export const PlaceholderScene = styled.div`
   background: radial-gradient(circle at top, rgba(0, 212, 255, 0.08), transparent 40%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 45%),
     var(--surface-2);
+  animation: ${fadeSlideIn} 0.5s ease both;
 `;
 
 export const HeroContent = styled.div`
@@ -667,6 +668,35 @@ export const Btn = styled.button<{ $primary?: boolean }>`
     background: ${p => p.$primary ? '#00d4ff33' : 'var(--surface-2)'};
     color: ${p => p.$primary ? 'var(--accent)' : 'var(--text)'};
     border-color: ${p => p.$primary ? 'var(--accent)' : 'var(--border-glow)'};
+  }
+`;
+
+export const HeroActionButton = styled.button`
+  align-self: center;
+  margin: 30px auto 32px;
+  padding: 16px 28px;
+  min-width: 260px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid var(--accent);
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--accent);
+  cursor: pointer;
+  border-radius: calc(var(--panel-radius) * 2);
+  transition: all 0.18s ease;
+  animation: ${fadeSlideIn} 0.45s ease 0.1s both;
+
+  &:hover {
+    background: rgba(0, 212, 255, 0.18);
+    color: var(--text-bright);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 992px) {
+    min-width: auto;
+    width: 100%;
   }
 `;
 

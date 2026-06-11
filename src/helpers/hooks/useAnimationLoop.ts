@@ -8,7 +8,8 @@ export function useAnimationLoop({
     cameraRef,
     rendererRef,
     keysRef,
-    focusedRef
+    focusedRef,
+    showFPS = true
 }: {
     mountRef: RefObject<HTMLDivElement | null>
     sceneRef: RefObject<THREE.Scene | null>
@@ -16,6 +17,7 @@ export function useAnimationLoop({
     rendererRef: RefObject<THREE.WebGLRenderer | null>
     keysRef: RefObject<Record<string, boolean>>
     focusedRef: RefObject<boolean>
+    showFPS?: boolean
 }) {
     const animationRef = useRef<number | null>(null)
     const statsRef = useRef<Stats | null>(null)
@@ -39,7 +41,7 @@ export function useAnimationLoop({
         const keys = keysRef.current
         mount.tabIndex = 0
 
-        if (!statsRef.current) {
+        if (!statsRef.current && showFPS) {
 
             const stats = new Stats()
             stats.showPanel(0) // sets it to be the fps panel

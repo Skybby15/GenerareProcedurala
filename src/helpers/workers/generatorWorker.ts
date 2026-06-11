@@ -3,11 +3,13 @@ import { CA2DGridGenerator } from "../../engine/generators/CA/CA2DGridGenerator"
 import { DLA2DGridGenerator } from "../../engine/generators/DLA/DLA2DGridGenerator";
 import { PN2DGridGenerator } from "../../engine/generators/PN/PN2DGridGenerator";
 import { VD2DGridGenerator } from "../../engine/generators/VD/VD2DGridGenerator";
+import { CombinedGridGenerator } from "../../engine/generators/Custom/CombinedGridGenerator";
 import type { GeneratorWorkerData } from "../types/GeneratorWorkerData";
 import type { DLAConfigValues } from "../configs/DLAConfig";
 import type { CAConfigValues } from "../configs/CAConfig";
 import type { PNConfigValues } from "../configs/PNConfig";
 import type { VDConfigValues } from "../configs/VDConfig";
+import type { WorldConfigValues } from "../configs/WorldConfig";
 import type { IGridGenerator } from "../../engine/generators/IGridGenerator";
 import { CA3DGridGenerator } from "../../engine/generators/CA/CA3DGridGenerator";
 import { DLA3DGridGenerator } from "../../engine/generators/DLA/DLA3DGridGenerator";
@@ -35,7 +37,11 @@ self.onmessage = async (e : MessageEvent<GeneratorWorkerData>) => {
     case "VD2D":
         generator = new VD2DGridGenerator();
         trueConfig = config as VDConfigValues;
-        break
+        break;
+    case "W2D":
+        generator = new CombinedGridGenerator();
+        trueConfig = config as WorldConfigValues;
+        break;
     case "CA3D":
         generator = new CA3DGridGenerator();
         trueConfig = config as CAConfigValues;

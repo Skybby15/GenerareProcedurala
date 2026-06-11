@@ -1,8 +1,8 @@
 import * as Styled from "./helpers/ui/StyledPrimitives";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { CAConfigPresets } from "./helpers/configs/CAConfig";
-import CustomScenePage from "./showcase/CustomScenePage";
+import WorldScenePage from "./showcase/Custom/WorldScenePage";
+import { WorldConfigPresets } from "./helpers/configs/WorldConfig";
 
 
 export default function Home() {
@@ -56,7 +56,7 @@ export default function Home() {
             </Styled.PanelLabel>
             <Styled.HeroSplit>
               <Styled.PlaceholderScene>
-                <CustomScenePage config={CAConfigPresets.default} />
+                <WorldScenePage config={WorldConfigPresets.default} />
               </Styled.PlaceholderScene>
               <Styled.HeroContent>
                 <Styled.ModelBadge>Powered by Cellular Automata</Styled.ModelBadge>

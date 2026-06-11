@@ -29,6 +29,5 @@ export class DLAConfigPresets {
         stickProximity: 1,
 
         particleSpawnBehaviour: "empty"
-
     }
 }

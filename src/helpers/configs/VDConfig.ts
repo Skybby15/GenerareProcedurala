@@ -2,9 +2,6 @@ import type { DistanceMetric } from "../types/DistanceMetric"
 import type { BasicConfigValues } from "../types/BasicConfig"
 
 export type VDConfigValues = BasicConfigValues & {
-    seed: string
-    gridSize: number
-
     sitesNumber:number,
     relaxationSteps: number
     distanceFunction: DistanceMetric

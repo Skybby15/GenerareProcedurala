@@ -759,7 +759,6 @@ export const Value = styled.span`
 `;
 
 export const Slider = styled.input`
-  -webkit-appearance: none;
   width: 100%;
   height: 2px;
   background: var(--border);

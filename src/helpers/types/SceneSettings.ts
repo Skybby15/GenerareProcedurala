@@ -4,6 +4,6 @@ export type SceneSettingsValues = {
 
 export class SceneSettings {
   static default : SceneSettingsValues = {
-    resetCameraPosition: true
+    resetCameraPosition: true,
   }
 }

@@ -33,7 +33,7 @@ export function useThreeScene(mountRef: React.RefObject<HTMLDivElement | null>) 
         }
 
         if (!rendererRef.current) {
-            const renderer = new THREE.WebGLRenderer({ antialias: true })
+            const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" })
             renderer.setSize(width, height)
             renderer.setPixelRatio(window.devicePixelRatio * 0.7)
 

@@ -1,6 +1,5 @@
 import * as Styled from "./StyledPrimitives";
 
-// Estimates simulation cost: O(particles × steps)
 export function ComplexityPreview({ particles, steps, gridSize }: {
   particles: number;
   steps: number;

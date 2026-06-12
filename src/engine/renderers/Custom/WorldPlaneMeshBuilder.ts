@@ -80,6 +80,9 @@ export class WorldPlaneMeshBuilder implements IMeshBuilder<WorldGridData, WorldC
 
         const terrain = new THREE.Mesh(terrainGeo, terrainMat);
         group.add(terrain);
+        group.userData = {
+            isRotating : true
+        }
 
         return group;
     }

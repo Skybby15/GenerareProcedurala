@@ -15,8 +15,8 @@ export function useAnimationLoop({
     sceneRef: RefObject<THREE.Scene | null>
     cameraRef: RefObject<THREE.PerspectiveCamera | null>
     rendererRef: RefObject<THREE.WebGLRenderer | null>
-    keysRef: RefObject<Record<string, boolean>>
-    focusedRef: RefObject<boolean>
+    keysRef?: RefObject<Record<string, boolean>>
+    focusedRef?: RefObject<boolean>
     showFPS?: boolean
 }) {
     const animationRef = useRef<number | null>(null)
@@ -38,13 +38,13 @@ export function useAnimationLoop({
 
         if (!scene || !camera || !renderer || !mount) return
 
-        const keys = keysRef.current
+        const keys = keysRef?.current
         mount.tabIndex = 0
 
         if (!statsRef.current && showFPS) {
 
             const stats = new Stats()
-            stats.showPanel(0) // sets it to be the fps panel
+            stats.showPanel(0) 
             mount.appendChild(stats.dom)
             stats.dom.style.position = "absolute";
             stats.dom.style.pointerEvents = "none";
@@ -59,7 +59,6 @@ export function useAnimationLoop({
 
             let speed = 0.2
 
-            // movement vectors
             camera.getWorldDirection(forward)
             forward.normalize()
 
@@ -69,22 +68,22 @@ export function useAnimationLoop({
 
             right.set(-flatForward.z, 0, flatForward.x)
 
-            if(focusedRef.current){
-                if (keys["ShiftLeft"]) speed *= 2
+            if(focusedRef?.current){
+                if (keys?.["ShiftLeft"]) speed *= 2
 
-                if (keys["KeyW"]) {
+                if (keys?.["KeyW"]) {
                     camera.position.addScaledVector(forward, speed)
                 }
 
-                if (keys["KeyS"]) {
+                if (keys?.["KeyS"]) {
                     camera.position.addScaledVector(forward, -speed)
                 }
 
-                if (keys["KeyD"]) {
+                if (keys?.["KeyD"]) {
                     camera.position.addScaledVector(right, speed)
                 }
 
-                if (keys["KeyA"]) {
+                if (keys?.["KeyA"]) {
                     camera.position.addScaledVector(right, -speed)
                 }
             }
@@ -92,6 +91,9 @@ export function useAnimationLoop({
             const renderDistance = 60;
 
             scene.traverse((obj) => {
+                if(obj.userData.isRotating)
+                    obj.rotation.y += 0.002
+
                 if (!obj.userData.isChunk) return;
 
                 const center = obj.userData.chunkCenter as THREE.Vector3;

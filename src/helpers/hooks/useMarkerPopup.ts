@@ -34,6 +34,7 @@ export function useMarkerPopup({
         const mouse = new THREE.Vector2()
 
         const onClick = (event: MouseEvent) => {
+            event.preventDefault()
 
             const rect = mount.getBoundingClientRect()
 
@@ -69,10 +70,10 @@ export function useMarkerPopup({
             setPopup(null)
         }
 
-        mount.addEventListener("click", onClick)
+        mount.addEventListener("contextmenu", onClick)
 
         return () => {
-            mount.removeEventListener("click", onClick)
+            mount.removeEventListener("contextmenu", onClick)
         }
 
     }, [mountRef, cameraRef, sceneRef])

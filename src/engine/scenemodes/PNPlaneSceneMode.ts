@@ -6,14 +6,12 @@ import type { PNConfigValues } from "../../helpers/configs/PNConfig";
 export class PNPlaneSceneMode implements ISceneMode<PNConfigValues> {
     setup(config: PNConfigValues, scene: THREE.Scene, camera: THREE.Camera, settings: SceneSettingsValues): void {
         const {gridSize} = config;
-        // ── Camera setup ────────────────────────────────────────────────────────
         if(settings.resetCameraPosition)
         {
             camera.position.set(0, gridSize * 0.7, 0);
             camera.lookAt(0,0,0)
         }
 
-        // ── Lighting ─────────────────────────────────────────────────────────────
             const ambient = new THREE.AmbientLight(0x88aacc, 0.5);
             scene.add(ambient);
         
@@ -35,7 +33,7 @@ export class PNPlaneSceneMode implements ISceneMode<PNConfigValues> {
         }
         ): THREE.Mesh {
         const {
-            height = options?.height,          // y position of water plane
+            height = options?.height,      
             color = "#2a7fff",
             opacity = 0.6,
         } = options || {};
@@ -57,7 +55,6 @@ export class PNPlaneSceneMode implements ISceneMode<PNConfigValues> {
 
         water.position.y = height || -0.1;
 
-        // optional: render on top of terrain slightly
         water.renderOrder = 1;
 
         scene.add(water);

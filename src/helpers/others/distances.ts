@@ -1,7 +1,3 @@
-// =========================
-// EUCLIDEAN
-// =========================
-
 import type { DistanceMetric } from "../types/DistanceMetric";
 
 export function euclideanDist2D(
@@ -31,10 +27,6 @@ export function euclideanDist3D(
     return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-// =========================
-// MANHATTAN
-// =========================
-
 export function manhattanDist2D(
     x1: number,
     y1: number,
@@ -58,10 +50,6 @@ export function manhattanDist3D(
         Math.abs(z2 - z1)
     );
 }
-
-// =========================
-// CHEBYSHEV
-// =========================
 
 export function chebyshevDist2D(
     x1: number,
@@ -89,10 +77,6 @@ export function chebyshevDist3D(
         Math.abs(z2 - z1)
     );
 }
-
-// =========================
-// MINKOWSKI
-// =========================
 
 export function minkowskiDist2D(
     x1: number,

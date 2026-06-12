@@ -28,6 +28,6 @@ export class DLAConfigPresets {
         stickRadius: 1,
         stickProximity: 1,
 
-        particleSpawnBehaviour: "empty"
+        particleSpawnBehaviour: "edge"
     }
 }

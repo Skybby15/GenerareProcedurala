@@ -142,7 +142,7 @@ export class VD2DGridGenerator implements IGridGenerator<VDGridData, VDConfigVal
             }
         }
 
-        // Move sites to centroids
+        // Move sites to centers
         return sites.map((site, i) => {
 
             const acc = accumulators[i];

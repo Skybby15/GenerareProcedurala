@@ -61,7 +61,6 @@ implements IMeshBuilder<number[][][], CAConfigValues>
 
                     let faceCount = 0;
 
-                    // Count faces in chunk
                     for (let z = cz; z < zEnd; z++) {
                         for (let y = cy; y < yEnd; y++) {
                             for (let x = cx; x < xEnd; x++) {
@@ -93,7 +92,6 @@ implements IMeshBuilder<number[][][], CAConfigValues>
 
                     let index = 0;
 
-                    // Fill matrices
                     for (let z = cz; z < zEnd; z++) {
                         for (let y = cy; y < yEnd; y++) {
                             for (let x = cx; x < xEnd; x++) {

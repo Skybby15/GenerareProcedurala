@@ -43,25 +43,25 @@ const BIOME_PARAMETERS: Record<BiomeType, {
         lacunarity: 2.0,
     },
     Mountains: {
-        baseHeight: 2.8,
-        amplitude: 3.6,
-        scale: 12,
-        octaves: 5,
-        persistence: 0.55,
-        lacunarity: 2.5,
+        baseHeight: 3,
+        amplitude: 75,
+        scale: 5,
+        octaves: 10,
+        persistence: 0.6,
+        lacunarity: 1.5,
     },
     Highlands: {
-        baseHeight: 1.6,
-        amplitude: 2.1,
-        scale: 20,
-        octaves: 4,
-        persistence: 0.5,
-        lacunarity: 2.1,
+        baseHeight: 0,
+        amplitude: 25,
+        scale: 5,
+        octaves: 8,
+        persistence: 0.6,
+        lacunarity: 1.5,
     },
     Desert: {
         baseHeight: 0.35,
-        amplitude: 1.0,
-        scale: 45,
+        amplitude: 10,
+        scale: 10,
         octaves: 3,
         persistence: 0.5,
         lacunarity: 2.2,
@@ -235,9 +235,12 @@ export class CombinedGridGenerator implements IGridGenerator<WorldGridData, Worl
                 const nx = x / gridSize;
                 const ny = y / gridSize;
 
-                const heightA = regionParams.baseHeight + perlin(nx * regionParams.scale, ny * regionParams.scale, regionParams.octaves, regionParams.persistence, regionParams.lacunarity) * regionParams.amplitude;
-                const heightB = neighborParams.baseHeight + perlin(nx * neighborParams.scale, ny * neighborParams.scale, neighborParams.octaves, neighborParams.persistence, neighborParams.lacunarity) * neighborParams.amplitude;
+                let heightA = regionParams.baseHeight + perlin(nx * regionParams.scale, ny * regionParams.scale, regionParams.octaves, regionParams.persistence, regionParams.lacunarity) * regionParams.amplitude;
+                let heightB = neighborParams.baseHeight + perlin(nx * neighborParams.scale, ny * neighborParams.scale, neighborParams.octaves, neighborParams.persistence, neighborParams.lacunarity) * neighborParams.amplitude;
                 const borderFactor = Math.min(1, Math.max(0, voronoi.blendMask[y][x] * borderSoftness * 16));
+
+                if(heightA < regionParams.baseHeight) heightA *= 0.3;
+                if(heightB < neighborParams.baseHeight) heightB *= 0.3;
                 heights[y][x] = this.lerp(heightA, heightB, borderFactor * 0.5);
             }
         }
@@ -254,7 +257,10 @@ export class CombinedGridGenerator implements IGridGenerator<WorldGridData, Worl
         config: WorldConfigValues
     ): boolean[][] {
         const riverMask: boolean[][] = [];
-        const allowed = (x: number, y: number) => biomeForSite[regionMap[y][x]] !== "Desert";
+        const allowed = (x: number, y: number) => {
+            const biome = biomeForSite[regionMap[y][x]];
+            return biome === "Plains" || biome === "Highlands";
+        };
 
         for (let y = 0; y < gridSize; y++) {
             riverMask[y] = [];
@@ -264,10 +270,22 @@ export class CombinedGridGenerator implements IGridGenerator<WorldGridData, Worl
         }
 
         const sourceCandidates: Site[] = [];
+        const highlandSources: Site[] = [];
+        const edgeTargets: Site[] = [];
+
         for (let y = 0; y < gridSize; y++) {
             for (let x = 0; x < gridSize; x++) {
-                if (allowed(x, y)) {
-                    sourceCandidates.push({ x, y });
+                if (!allowed(x, y)) continue;
+
+                const candidate = { x, y };
+                sourceCandidates.push(candidate);
+
+                if (biomeForSite[regionMap[y][x]] === "Highlands") {
+                    highlandSources.push(candidate);
+                }
+
+                if (this.isEdgeCell(x, y, gridSize)) {
+                    edgeTargets.push(candidate);
                 }
             }
         }
@@ -276,44 +294,54 @@ export class CombinedGridGenerator implements IGridGenerator<WorldGridData, Worl
             return riverMask;
         }
 
-        const start = sourceCandidates[Math.floor(rng() * sourceCandidates.length)];
+        const start = this.chooseHighlandSource(highlandSources.length > 0 ? highlandSources : sourceCandidates, heights, rng);
         riverMask[start.y][start.x] = true;
 
-        const regionVisited = new Set<number>();
-        regionVisited.add(regionMap[start.y][start.x]);
+        const riverTarget = this.chooseRiverTarget(edgeTargets.length > 0 ? edgeTargets : this.getEdgeCells(gridSize, allowed), heights, rng);
+        this.walkPathBetween(start, riverTarget, heights, regionMap, riverMask, rng, allowed, config.riverStepLimit);
 
-        const edgeCells = this.getEdgeCells(gridSize, allowed);
-
-        for (let walker = 0; walker < config.riverWalkers; walker++) {
-            if (edgeCells.length === 0) break;
-            let current = edgeCells[Math.floor(rng() * edgeCells.length)];
-            const trail: Site[] = [current];
-
-            for (let step = 0; step < config.riverStepLimit; step++) {
-                if (this.isAdjacentToRiver(current, riverMask)) {
-                    trail.forEach(cell => {
-                        riverMask[cell.y][cell.x] = true;
-                        regionVisited.add(regionMap[cell.y][cell.x]);
-                    });
-                    break;
-                }
-
-                const next = this.chooseRiverNeighbor(current, heights, regionMap, riverMask, rng, allowed);
-                if (!next) break;
-                trail.push(next);
-                current = next;
-            }
-        }
-
-        if (regionVisited.size < 2) {
-            const otherTargets = sourceCandidates.filter(cell => regionMap[cell.y][cell.x] !== regionMap[start.y][start.x]);
-            if (otherTargets.length > 0) {
-                const target = otherTargets[Math.floor(rng() * otherTargets.length)];
-                this.walkPathBetween(start, target, heights, regionMap, riverMask, rng, allowed, config.riverStepLimit);
-            }
+        for (let walker = 1; walker < config.riverWalkers; walker++) {
+            const branchSource = this.chooseBranchSource(sourceCandidates, heights, rng);
+            const riverCells = this.getRiverCells(riverMask);
+            const branchTarget = riverCells.length > 0 ? riverCells[Math.floor(rng() * riverCells.length)] : riverTarget;
+            this.walkPathBetween(branchSource, branchTarget, heights, regionMap, riverMask, rng, allowed, Math.max(32, Math.floor(config.riverStepLimit / 2)));
         }
 
         return riverMask;
+    }
+
+    private chooseHighlandSource(candidates: Site[], heights: number[][], rng: () => number): Site {
+        const sorted = [...candidates].sort((a, b) => heights[b.y][b.x] - heights[a.y][a.x]);
+        const topCount = Math.max(1, Math.floor(sorted.length * 0.2));
+        return sorted[Math.floor(rng() * topCount)];
+    }
+
+    private chooseBranchSource(candidates: Site[], heights: number[][], rng: () => number): Site {
+        const sorted = [...candidates].sort((a, b) => heights[b.y][b.x] - heights[a.y][a.x]);
+        const topCount = Math.max(1, Math.floor(sorted.length * 0.4));
+        return sorted[Math.floor(rng() * topCount)];
+    }
+
+    private chooseRiverTarget(candidates: Site[], heights: number[][], rng: () => number): Site {
+        const sorted = [...candidates].sort((a, b) => heights[a.y][a.x] - heights[b.y][b.x]);
+        const lowCount = Math.max(1, Math.floor(sorted.length * 0.25));
+        return sorted[Math.floor(rng() * lowCount)];
+    }
+
+    private getRiverCells(riverMask: boolean[][]): Site[] {
+        const cells: Site[] = [];
+        for (let y = 0; y < riverMask.length; y++) {
+            for (let x = 0; x < riverMask[y].length; x++) {
+                if (riverMask[y][x]) {
+                    cells.push({ x, y });
+                }
+            }
+        }
+        return cells;
+    }
+
+    private isEdgeCell(x: number, y: number, gridSize: number) {
+        return x === 0 || y === 0 || x === gridSize - 1 || y === gridSize - 1;
     }
 
     private walkPathBetween(

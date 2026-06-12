@@ -13,6 +13,9 @@ export default function VDDetailsPage(): React.JSX.Element {
           territory maps, and tiling patterns. The interactive scene above
           visualizes sites and their corresponding Voronoi cells.
         </Styled.Hint>
+        <Styled.Hint>
+          Right click on one of the marks on the scene to see a popup with the coordinates and weight of the site.
+        </Styled.Hint>
       </Styled.AnimatedSection>
 
       <Styled.AnimatedSection>
@@ -32,11 +35,10 @@ export default function VDDetailsPage(): React.JSX.Element {
         <Styled.AnimatedTitle>Parameters</Styled.AnimatedTitle>
         <Styled.Hint>
           <Styled.StepList>
-            <Styled.StepItem><strong>Site count</strong>: number of seed points creating regions.</Styled.StepItem>
-            <Styled.StepItem><strong>Seed distribution</strong>: random, Poisson, grid, or custom placement.</Styled.StepItem>
+            <Styled.StepItem><strong>Number of sites</strong>: number of seed points creating regions.</Styled.StepItem>
             <Styled.StepItem><strong>Distance metric</strong>: Euclidean, Manhattan, or custom metric.</Styled.StepItem>
             <Styled.StepItem><strong>Relaxation</strong>: iterations of Lloyd's algorithm for centroidal Voronoi.</Styled.StepItem>
-            <Styled.StepItem><strong>Bounding</strong>: clipping to scene bounds or applying wrap/periodic edges.</Styled.StepItem>
+            <Styled.StepItem><strong>Weights</strong>: weights can be added for each site if weighted Voronoi is desired. This adds a random weight from a chosen range to each site.</Styled.StepItem>
           </Styled.StepList>
         </Styled.Hint>
       </Styled.AnimatedSection>
@@ -56,20 +58,21 @@ export default function VDDetailsPage(): React.JSX.Element {
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Performance Notes</Styled.AnimatedTitle>
         <Styled.Hint>
-          Exact Voronoi computation (e.g., Fortune's algorithm) is typically
-          O(n log n). Rasterized or grid-approximate approaches trade accuracy
-          for speed and scale well for many sites. Use spatial indexing or
-          tiling for large site counts and limit relaxation iterations.
+          Exact Voronoi computation is typically
+          O(n^2) or O(n^3) depending on how many dimensions are used, with n being the grid size.
+          Using relaxation (Lloyd's algorithm) adds additional iterations, 
+          so keep site counts moderate for real-time interaction.
         </Styled.Hint>
       </Styled.AnimatedSection>
 
       <Styled.AnimatedSection>
         <Styled.AnimatedTitle>Possible Modifications</Styled.AnimatedTitle>
         <Styled.Hint>
-          Extend to power diagrams (weighted Voronoi), apply anisotropic
-          distance metrics, compute 3D Voronoi, or integrate site attributes
-          (colors, weights). Use centroidal relaxation for more uniform cells
-          or constrain sites to features like coastlines or existing geometry.
+          The representation above counts the distance for every cell to every site, which is simple but inefficient. 
+          More efficient algorithms like Fortune's sweep line or jump flooding can compute Voronoi diagrams in O(n log n) time.
+        </Styled.Hint>
+        <Styled.Hint>
+          The algorithm can be extended into a 3d representation (Voronoi tessellation) by using a 3D grid and computing the nearest site in 3D space.
         </Styled.Hint>
       </Styled.AnimatedSection>
     </Styled.Wrap>

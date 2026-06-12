@@ -2,8 +2,6 @@ import { useState, useCallback, type Dispatch, type SetStateAction } from "react
 import * as Styled from "./helpers/ui/StyledPrimitives";
 import { SceneSettings, type SceneSettingsValues } from "./helpers/types/SceneSettings";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 export type SceneConfigPair = {
   id: string;
   label: string;

@@ -36,7 +36,7 @@ export class CA2DBlockMeshBuilder implements IMeshBuilder<number[][], CAConfigVa
 
                 dummy.position.set(
                     x - offset,
-                    isLand ? 0.2 : 0.05,   // land sits higher than water surface
+                    isLand ? 0.2 : 0.05,
                     y - offset
                 );
                 dummy.updateMatrix();

@@ -27,10 +27,6 @@ export class VDTerritoriesMeshBuilder implements IMeshBuilder<VDGridData, VDConf
         const heights =
             sites.map(() => seededRandom() * 3)
 
-        // -----------------------------
-        // TERRAIN
-        // -----------------------------
-
         const terrainGeo =
             new THREE.PlaneGeometry(
                 gridSize,
@@ -93,22 +89,18 @@ export class VDTerritoriesMeshBuilder implements IMeshBuilder<VDGridData, VDConf
 
         group.add(terrain)
 
-        // -----------------------------
-        // MARKERS
-        // -----------------------------
-
         const coneHeight = 4.5
 
         const markerGeo =
-            new THREE.ConeGeometry(0.2, coneHeight, 5)
+            new THREE.ConeGeometry(0.5, coneHeight, 5)
 
-        const markerMat =
-            new THREE.MeshStandardMaterial({
-                color: '#ffcc00',
-                emissive: '#ffaa00'
-            })
-
-        sites.forEach(site => {
+            
+        sites.forEach((site,index) => {
+            const markerMat =
+                new THREE.MeshStandardMaterial({
+                    color: colors[index],
+                    emissive: colors[index],
+                })
 
             const marker = new THREE.Mesh(markerGeo, markerMat)
             marker.userData = { 
@@ -124,6 +116,8 @@ export class VDTerritoriesMeshBuilder implements IMeshBuilder<VDGridData, VDConf
 
             marker.position.y =
                 coneHeight / 2
+
+            marker.rotateX(-Math.PI)
 
             group.add(marker)
         })

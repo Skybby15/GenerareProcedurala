@@ -5,14 +5,12 @@ import type { SceneSettingsValues } from "../../helpers/types/SceneSettings";
 export class PlaneSceneMode implements ISceneMode<any> {
     setup(config: any, scene: THREE.Scene, camera: THREE.Camera, settings: SceneSettingsValues): void {
         const {gridSize} = config;
-        // ── Camera setup ────────────────────────────────────────────────────────
         if(settings.resetCameraPosition)
         {
             camera.position.set(0, gridSize * 0.7, 0);
             camera.lookAt(0,0,0)
         }
 
-        // ── Lighting ─────────────────────────────────────────────────────────────
             const ambient = new THREE.AmbientLight(0x88aacc, 0.5);
             scene.add(ambient);
         

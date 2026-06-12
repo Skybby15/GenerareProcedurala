@@ -7,13 +7,9 @@ export class DLA2DBlockMeshBuilder implements IMeshBuilder<boolean[][], DLAConfi
         const {gridSize} = config
 
         const group = new THREE.Group();
-
-        // Shared geometries and materials for instancing
         const landGeo = new THREE.BoxGeometry(1, 0.4, 1);
-
         const landMat = new THREE.MeshStandardMaterial({ color: "#567d46" });
 
-        // Count land and water cells for instanced meshes
         let landCount = 0;
         for (let y = 0; y < gridSize; y++) {
             for (let x = 0; x < gridSize; x++) {
@@ -26,7 +22,6 @@ export class DLA2DBlockMeshBuilder implements IMeshBuilder<boolean[][], DLAConfi
         landMesh.receiveShadow = true;
 
         const dummy = new THREE.Object3D();
-        // Center the grid around origin
         const offset = gridSize / 2 - 0.5;
 
         let li = 0;
@@ -37,7 +32,7 @@ export class DLA2DBlockMeshBuilder implements IMeshBuilder<boolean[][], DLAConfi
 
                 dummy.position.set(
                     x - offset,
-                    isLand ? 0.2 : 0.05,   // land sits higher than water surface
+                    isLand ? 0.2 : 0.05, 
                     y - offset
                 );
                 dummy.updateMatrix();

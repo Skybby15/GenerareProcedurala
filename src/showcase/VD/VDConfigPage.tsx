@@ -72,7 +72,7 @@ export default function VDConfigPage({ values, onChange }: VDConfigProps) {
 
             {/* ── Distance function ── */}
             <Styled.Section>
-            <Styled.SectionTitle>Distance Function</Styled.SectionTitle>
+            <Styled.SectionTitle>Distance Metric</Styled.SectionTitle>
             <Styled.SegmentRow>
                 {DISTANCE_METRICS.map(metric => (
                 <Styled.Seg

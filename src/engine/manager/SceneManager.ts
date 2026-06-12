@@ -95,7 +95,6 @@ export class SceneManager<TGridData> {
         config: BasicConfigValues
     ): Promise<TGridData> {
         return new Promise((resolve, reject) => {
-            // If there's an existing worker running, cancel it before starting a new one
             if (this.currentWorker) {
                 try {
                     this.currentWorker.terminate()
@@ -120,7 +119,6 @@ export class SceneManager<TGridData> {
             this.currentWorkerReject = reject
 
             worker.onmessage = (ev) => {
-                // only resolve if this worker is still the active one
                 if (this.currentWorker === worker) {
                     resolve(ev.data.grid)
                     try { worker.terminate() } catch (e) { 

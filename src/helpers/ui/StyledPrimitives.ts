@@ -1,7 +1,5 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 
-// ─── Global styles ────────────────────────────────────────────────────────────
-
 export const GlobalStyle = createGlobalStyle`
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -88,7 +86,7 @@ export const HomeContainer = styled.main`
   align-items: center;
   gap: 22px;
   padding: 20px;
-  height: calc(100vh - 48px);
+  height: 100%;
   overflow-y: auto;
   width: 100%;
 `;
@@ -129,7 +127,7 @@ export const AlgorithmDetailsScroll = styled.div`
 
 export const PlaceholderScene = styled.div`
   position: relative;
-  min-height: 520px;
+  min-height: 620px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,9 +149,11 @@ export const HeroContent = styled.div`
 
 export const HeroTitle = styled.h1`
   font-family: var(--sans);
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(1.7rem, 3vw, 3rem);
   color: var(--text-bright);
   line-height: 1.05;
+
+  animation: ${fadeSlideIn} 0.5s ease both;
 `;
 
 export const HeroDescription = styled.p`
@@ -162,6 +162,8 @@ export const HeroDescription = styled.p`
   font-size: 0.96rem;
   line-height: 1.75;
   max-width: 80ch;
+
+  animation: ${fadeSlideIn} 0.5s ease both;
 `;
 
 export const ModelBadge = styled.span`
@@ -673,7 +675,7 @@ export const Btn = styled.button<{ $primary?: boolean }>`
 
 export const HeroActionButton = styled.button`
   align-self: center;
-  margin: 30px auto 32px;
+  margin: 75px auto 32px;
   padding: 16px 28px;
   min-width: 260px;
   font-family: var(--mono);
@@ -1082,7 +1084,6 @@ export const StepList = styled.ul`
 
 export const StepItem = styled.li`
   position: relative;
-  color: var(--text-muted);
   font-family: var(--mono);
   line-height: 1.75;
   font-size: 0.95rem;

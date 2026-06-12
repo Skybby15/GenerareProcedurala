@@ -28,7 +28,6 @@ implements IMeshBuilder<number[][], CAConfigValues>
 
         const positions = terrainGeo.attributes.position;
 
-        // how deep water cells are carved
         const riverDepth = -1.5;
 
         for (let i = 0; i < positions.count; i++) {
@@ -37,9 +36,6 @@ implements IMeshBuilder<number[][], CAConfigValues>
             const y = Math.floor(i / gridSize);
 
             const value = grid[y][x];
-
-            // 1 = land
-            // 0 = river / carved terrain
 
             const height =
                 value === 0
@@ -50,10 +46,6 @@ implements IMeshBuilder<number[][], CAConfigValues>
         }
 
         terrainGeo.computeVertexNormals();
-
-        // -------------------------------------------------
-        // Material
-        // -------------------------------------------------
 
         const terrainMat =
             new THREE.MeshStandardMaterial({

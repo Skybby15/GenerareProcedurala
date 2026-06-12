@@ -10,10 +10,10 @@ export type WorldConfigValues = BasicConfigValues & {
 export class WorldConfigPresets {
     static default: WorldConfigValues = {
         seed: '0',
-        gridSize: 160,
+        gridSize: 200,
         borderSoftness: 0.06,
-        riverWalkers: 6,
-        riverStepLimit: 320,
+        riverWalkers: 20,
+        riverStepLimit: 10000,
         siteRelaxation: 2,
     }
 }

@@ -6,7 +6,6 @@ import { useAnimationLoop } from "../../helpers/hooks/useAnimationLoop";
 import { PlaneSceneMode } from "../../engine/scenemodes/PlaneSceneMode";
 import { Pipeline } from "../../engine/pipeline/Pipeline";
 import type { DLAConfigValues } from "../../helpers/configs/DLAConfig";
-//import { DLAPlaneMeshBuilder } from "../../engine/renderers/DLA/DLAPlaneMeshBuilder";
 import { CaveSceneMode } from "../../engine/scenemodes/CaveSceneMode";
 import { DLACaveMeshBuilder } from "../../engine/renderers/DLA/DLACaveMeshBuilder";
 import { useGeneratedScene, type setupFunction } from "../../helpers/hooks/useGeneratedScene";
@@ -37,12 +36,6 @@ export default function DLAScenePage({ config, settings, setSettings }: DLAScene
 
     const getSetup : setupFunction<DLAConfigValues> = useCallback((config) => {
         switch (config.mode) {
-            // case "2DSmooth":
-            // return {
-            //     sceneMode: new PlaneSceneMode(),
-            //     pipeline: new Pipeline(new DLAPlaneMeshBuilder()),
-            //     type: "DLA2D"
-            // };
 
             case "2DBlock":
             return {
